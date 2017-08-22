@@ -19,11 +19,11 @@ public class ConnectionManager {
 	        String password = "root";
 	        
 		/*// Jalastic
-	        String url = "jdbc:mysql://node4117-test1.lon-1.paas.massivegrid.net/test";
+	        String url = "jdbc:mysql://http://node23114-env-9184706.njs.jelastic.vps-host.net/test";
 	        String dbName = "test";
 	        String driver = "com.mysql.jdbc.Driver";
 	        String userName = "root";
-	        String password = "QXAprk01417";*/
+	        String password = "J3rV6IO75S";*/
 	        
 /*
 		//kdpatel2424@outlook.com--

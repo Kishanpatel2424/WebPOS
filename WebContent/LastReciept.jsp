@@ -8,7 +8,10 @@
 </head>
 <body>
 <div class="container-center">
-
+	
+	
+	<a href ="/InsertDataWebApplication/Invoice_${maxInvNum}.pdf" target="_blank">Open inv#${maxInvNum}</a>
+	
 </div>
 </body>
 </html>

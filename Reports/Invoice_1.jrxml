@@ -250,7 +250,7 @@
 				</textElement>
 				<text><![CDATA[$]]></text>
 			</staticText>
-			<textField>
+			<textField pattern="#,##0.00#;(#,##0.00#-)">
 				<reportElement mode="Opaque" x="360" y="0" width="54" height="20" uuid="8aced8b4-3c08-4437-9fd1-34c4ecf02bc1"/>
 				<textElement>
 					<font size="15"/>

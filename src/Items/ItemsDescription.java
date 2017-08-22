@@ -8,7 +8,7 @@ public class ItemsDescription {
 	public double iQty;
 	public double Tax;
 	public double ItemTotal;
-	 
+	public double total; 
 	
 
 	public void setiCode(String ItemCode){
@@ -35,18 +35,35 @@ public class ItemsDescription {
 	public double getiQty(){
 		return iQty;
 	}
-	
-	public void setTax(double Tax){
-		Tax = Tax;
+	//Returns total+tax on each item
+	public void setTax(double iPrice, double iQty){
+		ItemTotal =Tax-(iQty*iPrice);
+		
 	}
 	public double getTax(){
-		return Tax;
-	}
-	public void setItemTotal(double ItemTotal){
-		ItemTotal = ItemTotal;
-	}
-	public double getItemTotal(){
+		
 		return ItemTotal;
 	}
+	//Returns tax on each item
+	public void setItemTotalTax(double iPrice, double iQty){
+		
+		Tax = Math.round((iQty*iPrice)*1.0635*100);
+		Tax = Tax/100;
+	
+	}
+	public double getItemTotalTax(){
+		return Tax;
+	}
+	public void setTotal(double calcTotal){
+		total = calcTotal;
+		
+	}
+	public double getTotal(){
+		System.out.println(this.total+" From Items class");
+		
+		return this.total;
+	}
+	
+	
 
 }

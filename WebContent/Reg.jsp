@@ -4,15 +4,19 @@
 <%@ page import="java.util.Date" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-
+ 
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+<META HTTP-EQUIV="EXPIRES">
+<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
 <%@ include file = "home.jsp" %>
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -79,7 +83,8 @@ String NotExist = (String)request.getAttribute("NotExist");
 				<input type ="submit" value="Clear" name="Clear" class="form-control"/>
 			</th>
 			<th style="width:10%;">
-				Total $  ${TotalTax}
+			
+				Total $  ${Totalsum}
 				<input type="submit" Value="PAY" name="Tender" class="form-control">
 			</th>
 			
@@ -90,7 +95,8 @@ String NotExist = (String)request.getAttribute("NotExist");
 			</th>
 			<th style="width:10%;">
 				Print Reciept<br>
-				<a href ="/InsertDataWebApplication/Invoice_1.pdf" target="_blank"><input type="button" Value="Reciept" name="Reciept" class="form-control"></a>
+				<a href ="/InsertDataWebApplication/Invoice_${maxInvNum}.pdf" target="_blank"><input type="button" Value="Reciept" name="Reciept" class="form-control"></a>
+				
 			</th>
 		</tr>
 		</table>
@@ -115,28 +121,26 @@ String NotExist = (String)request.getAttribute("NotExist");
 							<c:choose>
 							 	 <c:when test="${empty itemList}">
 						         <c:set var="TotalNonTax" value="${0}" /> 
-						         <c:set var="Tax" value="${0}"/>
-						         <c:set var="Total" value="${0}"/>
-						         <c:set var="Number" value="${0}"/>
+						         
 					         
 					        </c:when>
 						        <c:otherwise>
 								    <c:forEach var="item" items="${itemList}">
 								        <c:set var="Number" value="${Number+1}"></c:set>
-								        <c:set var="ItemName" value="${item.getiName()}"/>
-								        <c:set var="Quantity" value="${item.getiQty()}"/>
-								        <c:set var="ItemPrice" value="${Quantity*item.getiPrice()}"/>
-								        <c:set var="TotalNonTax" value="${TotalNonTax+ItemPrice}"/> 
+								        <%-- <c:set var="ItemName" value="${item.getiName()}"/> --%>
+								        <%-- <c:set var="Quantity" value="${item.getiQty()}"/> --%>
+								        <%-- <c:set var="ItemPrice" value="${item.getiQty()*item.getiPrice()}"/> --%>
+								        <%-- <c:set var="TotalNonTax" value="${TotalNonTax+ItemPrice}"/>  --%>
 								        
 								         
 								        <tr> 
 								            <td style="width:4%">${Number}</td>
 								            <td style="width:14%">${item.getiCode()}</td>
-								            <td style="width:46%">${ItemName}</td>
+								            <td style="width:46%">${item.getiName()}</td>
 								            <td style="width:10%"><fmt:formatNumber type = "currency" pattern = "####.##" value = "${item.getiPrice()}" /></td>
-								            <td style="width:6%">${Quantity}</td>
-								            <td style="width:10%"><fmt:formatNumber type = "currency" pattern = "####.##" value = "${(ItemPrice*1.0635 -ItemPrice)}" /></td>
-											<td style="width:10%"><fmt:formatNumber type = "currency" pattern = "####.##" value = "${(ItemPrice*1.0635)}" /></td>					            
+								            <td style="width:6%">${item.getiQty()}</td>
+								            <td style="width:10%"><fmt:formatNumber type = "currency" pattern = "####.##" value = "${item.getTax()}" /></td>
+											<td style="width:10%"><fmt:formatNumber type = "currency" pattern = "####.##" value = "${item.getItemTotalTax()}" /></td>					            
 								        
 								        </tr>
 						            </c:forEach>
@@ -149,16 +153,20 @@ String NotExist = (String)request.getAttribute("NotExist");
 	<table class="table" id="item" >
 		<tr>
 			<th style="width:15%;">
-				Item NonTax:-
-				<input type="number" step="0.01" id="NonTax" name="DeleteIndex" value="" placeholder="Price $" class="form-control"/>
+				<input type="submit" Value="Non Tax" name="nonTaxItem" class="form-control">
+				<input type="number" step="0.01" id="nonTaxItem" name="nonTaxItemValue" value="" placeholder="Price $" class="form-control"/>
 			</th>
 			<th style="width:15%;">
-				Item Tax:-
-				<input type="number" step="0.01" id="Tax" name="DeleteIndex" value="" placeholder="Price $" class="form-control"/>
+				<input type="submit" Value="Tax Item"name="taxItem" class="form-control">
+				<input type="number" step="0.01" id="taxItem" name="taxItemValue" value="" placeholder="Price $" class="form-control"/>
 			</th>
 			
 			<th style="width:15%;">
-				<button class="form-control"><a href="/InsertDataWebApplication/SearchList.jsp">Search Item</a></button>
+				<!-- <button class="form-control"><a href="/InsertDataWebApplication/SearchList.jsp">Search Item</a></button> -->
+				Search Item:-<br>
+				<button type="button" class=" form-control">
+      				<span class="glyphicon glyphicon-search"></span><a href="/InsertDataWebApplication/SearchList.jsp"> Search
+   				 </button>
 			</th>
 			<th style="width:15%;">
 				Sale Reciepts:-

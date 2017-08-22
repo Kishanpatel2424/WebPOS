@@ -79,39 +79,34 @@ public class AddItems extends HttpServlet {
 		
 		int result;
 		if(submitButtonPressed){
-			if(request.getParameter("iCode") != null){
-				 iCode =request.getParameter("iCode").trim();
-			}
-			else if(request.getParameter("iCode") == null){
+			
+			if(request.getParameter("iCode") == null ||request.getParameter("iCode")=="" ) {
 				request.setAttribute("Enter Product BarCode","BarCode");
 				request.getRequestDispatcher("/AddItem.jsp").forward(request, response);
 			}
-			if(request.getParameter("iName") != null){
-				  iName = request.getParameter("iName");
+			
+			if(request.getParameter("iCode") != null){
+				 iCode =request.getParameter("iCode").trim();
+				 iName = request.getParameter("iName");
+				 Department = request.getParameter("Department");
+				 Price = (request.getParameter("iPrice"));
+				 	if(Price =="" || Price==null)
+				 		iPrice=0.0;
+				 	else	
+				 		iPrice = Double.parseDouble(Price);
+				// OtyOnHand = Integer.parseInt(request.getParameter("OtyOnHand"));
+				 if(request.getParameter("OtyOnHand") =="" || request.getParameter("OtyOnHand")==null)
+					 	OtyOnHand = 0;
+				 	else	
+				 		OtyOnHand = Integer.parseInt(request.getParameter("OtyOnHand"));
+				 Price =(request.getParameter("iCost"));
+				 
+				 if(Price =="" || Price==null)
+					 	iCost=0.0;
+				 	else	
+				 		iCost = Double.parseDouble(Price);
 			}
 			
-			if(request.getParameter("Department") != null){
-				Department = request.getParameter("Department");
-			}
-			
-			if(request.getParameter("iPrice") != null){
-				Price = (request.getParameter("iPrice"));
-				if(Price == "")
-					request.getRequestDispatcher("/AddItem.jsp").forward(request, response);
-				else
-				  iPrice = Double.parseDouble(Price);
-			}
-			if(request.getParameter("OtyOnHand")!= null && request.getParameter("OtyOnHand")!=""){
-				OtyOnHand = Integer.parseInt(request.getParameter("OtyOnHand"));
-			}
-			
-			if(request.getParameter("iCost") != null){
-				Price =(request.getParameter("iCost"));
-				if(Price == "")
-					request.getRequestDispatcher("/AddItem.jsp").forward(request, response);
-				else
-				  iCost = Double.parseDouble(Price);
-			}
 			
 			String Tax = request.getParameter("Tax");
 			

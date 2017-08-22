@@ -1,7 +1,9 @@
 package Items;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -26,7 +28,10 @@ import javax.servlet.http.HttpSession;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfWriter;
 import com.sun.xml.internal.txw2.Document;
 
 import net.sf.jasperreports.engine.JRDataSource;
@@ -81,7 +86,8 @@ public class Cashier extends HttpServlet {
 		response.setContentType("text/html");
 		
 		ResultSet results = null;
-		
+		ItemsDescription item =null;
+		item = new ItemsDescription();
 		
 		String iName;
 		double iPrice;
@@ -90,11 +96,15 @@ public class Cashier extends HttpServlet {
 		double change, due = 0;
 		int DeleteIndex=0;
 		double tax=0;
+		double total = 0;
 		
 		boolean Search 	= request.getParameter("Search") != null;
 		boolean Tender 	= request.getParameter("Tender") != null;
 		boolean Clear	= request.getParameter("Clear")  !=null;
 		boolean DeleteI = request.getParameter("Delete") !=null;
+		boolean taxItem = request.getParameter("taxItem") !=null;
+		boolean nonTaxItem = request.getParameter("nonTaxItem") !=null;
+		
 		
 		
 		boolean Find = request.getAttribute("Find") !=null;
@@ -110,18 +120,32 @@ public class Cashier extends HttpServlet {
 			System.out.println(request.getParameter("ItemCode")+" Value from Search");
 			
 			iCode = request.getParameter("ItemCode");
-			Q="1";
+			Q = "1";
 			Search = true;
 		}
+		//System.out.println(request.getParameter("taxItemValue")+" Tax Value");
+		//Check if tax item is pressed
+		if(taxItem){
+			iCode="999999998";
+			Q = request.getParameter(("Quantity"));
+			Search = true;
+		}
+		if(nonTaxItem){
+			iCode ="999999999";
+			Q = request.getParameter(("Quantity"));
+			Search= true;
+		}
+	//
 		int result;
 		
 		
 		if(Clear){
 			itemList.clear();
-			Total(-1); 
-			System.out.println(TotalTax);
+			 Total(-1);
+			 item.setTotal(0);
+			System.out.println(Totalsum);
 			 request.getSession().setAttribute("Clear", "Clear");
-			 request.setAttribute("TotalTax", TotalTax);
+			 request.setAttribute("TotalTax", Totalsum);
 			 request.getRequestDispatcher("/Reg.jsp").forward(request, response);
 				 
 			 approved=false;
@@ -134,14 +158,19 @@ public class Cashier extends HttpServlet {
 				DeleteIndex = Integer.parseInt(I);
 				
 				if(DeleteIndex>0 && DeleteIndex<=itemList.size()){
-					double a =itemList.get(DeleteIndex-1).getiPrice()*itemList.get(DeleteIndex-1).getiQty();
+					//double a =itemList.get(DeleteIndex-1).getiPrice()*itemList.get(DeleteIndex-1).getiQty();
+					double a = itemList.get(DeleteIndex-1).getItemTotalTax();
 					System.out.println(a);
 					itemList.remove(DeleteIndex-1);
 					Total(-a);
+double z = Math.round(Totalsum*100);
+z = z/100d;
+Totalsum = z;
+					item.setTotal(Totalsum);
 					
-					System.out.println(TotalTax+"After delete "+a);
+					System.out.println(item.getTotal()+" After delete "+a+" TotalSum value is "+z);
 				}
-				request.setAttribute("TotalTax", TotalTax);
+				 request.getSession().setAttribute("Totalsum", Totalsum);
 				request.getRequestDispatcher("/Reg.jsp").forward(request, response);
 				
 			}
@@ -159,31 +188,31 @@ public class Cashier extends HttpServlet {
 					PaymentType = "Card";
 				}
 				
-					if(Amount == (TotalTax)){
+					if(Amount == (Totalsum)){
 						due =0;
 						
-						System.out.println("Amount Paid "+TotalTax);
+						System.out.println("Amount Paid "+Totalsum);
 						request.setAttribute("due", due);
-						request.setAttribute("TotalTax", TotalTax);
+						request.setAttribute("TotalTax", Totalsum);
 						
 						 
 						 approved=true;
 					}
 					
-					if(Amount > TotalTax){
+					if(Amount > Totalsum){
 						due=0;
-						change= Math.round((Amount-TotalTax)*100);
+						change= Math.round((Amount-Totalsum)*100);
 						due=change/100;
 						
 						System.out.println(due);
 						 request.setAttribute("due", due);
-						 request.setAttribute("TotalTax", TotalTax);
+						 request.getSession().setAttribute("TotalTax", Totalsum);
 						 
 						 approved=true;
 					}
-					if(Amount<TotalTax){
-						due = TotalTax-Amount;
-						TotalTax = due;
+					if(Amount<Totalsum){
+						due = Totalsum-Amount;
+						Totalsum = due;
 						 request.setAttribute("Due", due);
 						 request.getRequestDispatcher("/PayPage.jsp").forward(request, response);
 					}
@@ -193,7 +222,7 @@ public class Cashier extends HttpServlet {
 		
 		if(Tender){
 			request.setAttribute("Tender", "Tender");
-			request.setAttribute("TotalTax", TotalTax);
+			request.setAttribute("TotalTax", Totalsum);
 			request.getRequestDispatcher("/PayPage.jsp").forward(request, response);
 		}
 			try{
@@ -202,8 +231,8 @@ public class Cashier extends HttpServlet {
 					MyConn = ConnectionManager.getConnection();
 					 myStmt = MyConn.createStatement();
 					
-					ItemsDescription item =null;
-				
+					//ItemsDescription item =null;
+					
 					//Search and display Begains
 				if(Search){
 					
@@ -218,7 +247,7 @@ public class Cashier extends HttpServlet {
 						
 							   
 							  iQty = Double.parseDouble(Q);
-						System.out.println(iCode+" Value from Search to Reg"+Q+" "+iQty);
+							  System.out.println(iCode+" Value from Search to Reg"+Q+" "+iQty);
 							  String Check = ("SELECT COUNT(ItemCode) FROM Item WHERE ItemCode ="+iCode);
 							  results = myStmt.executeQuery(Check);
 								 
@@ -236,19 +265,37 @@ public class Cashier extends HttpServlet {
 						
 						 results = myStmt.executeQuery(sqlStatement);
 						 
-							  item = new ItemsDescription();
+							 // item = new ItemsDescription();
 							
 							 while(results.next()){
-								 iCode = results.getString("ItemCode");
+								// iCode = results.getString("ItemCode");
 								 iName = results.getString("ItemName");
-								 iPrice = results.getDouble("ItemPrice");
+								 iPrice=results.getDouble("ItemPrice");
 								
+								 if(iCode == "999999998")	
+									 {
+									 	iPrice = Double.parseDouble(request.getParameter("taxItemValue"));
+									 	System.out.println(iCode+" Tax Item Price Overwritten"+iPrice);
+									 	
+									 }
+								 else if (iCode == "999999999")
+								 {
+									 	iPrice = Double.parseDouble(request.getParameter("nonTaxItemValue"));
+									 	System.out.println(iCode+" Non Tax Item Price Overwritten"+iPrice);
+									 	
+									 	
+								 }
+								 
 								 item.setiCode(iCode);
 								 item.setiName(iName);
 								 item.setiPrice(iPrice);
 								 item.setiQty(iQty);
-	
-								 Total(iPrice*iQty);
+								 item.setItemTotalTax(iPrice, iQty);
+								 item.setTax(iPrice, iQty);
+								 Total(item.getItemTotalTax());
+								 item.setTotal(Totalsum);
+								 //Total(iPrice*iQty);
+								 System.out.println(item.getTotal()+" tax per item*qty"+total);
 								 
 								 
 								itemList.add(item);
@@ -258,7 +305,7 @@ public class Cashier extends HttpServlet {
 								
 								  request.getSession().setAttribute("item", item);
 						          request.getSession().setAttribute("itemList", itemList);
-						          request.setAttribute("TotalTax", TotalTax);
+						          request.getSession().setAttribute("Totalsum", Totalsum);
 						          request.getRequestDispatcher("/Reg.jsp").forward(request, response);
 						          
 						         
@@ -312,7 +359,7 @@ public class Cashier extends HttpServlet {
 				if(approved){
 					
 					System.out.println("Payment Approved");
-					tax = (TotalTax-Total);
+					
 					
 					int InvoiceNumber = 0;
 					
@@ -320,7 +367,7 @@ public class Cashier extends HttpServlet {
 					java.sql.Timestamp timestamp = new java.sql.Timestamp(cal.getTimeInMillis());
 					
 					insertActor = MyConn.prepareStatement("INSERT INTO Invoice(InvoiceTotal,ChangeDue,PaymentType,Tax,Date,Status) VALUES(?,?,?,?,?,?)");
-					insertActor.setDouble(1,TotalTax);
+					insertActor.setDouble(1,Totalsum);
 					insertActor.setDouble(2, due);
 					insertActor.setString(3,PaymentType);
 					insertActor.setDouble(4, tax);
@@ -336,7 +383,7 @@ public class Cashier extends HttpServlet {
 						
 					}
 					
-					System.out.println("Invoice created total "+TotalTax);
+					System.out.println("Invoice created total "+Totalsum);
 					
 					try{
 						
@@ -346,7 +393,10 @@ public class Cashier extends HttpServlet {
 							String name = addItem.iName;
 							double price = addItem.iPrice;
 							double Quantity = addItem.iQty;
-							double QtyTax = (price*Quantity)*1.0635;
+							double QtyTax = 0;
+							QtyTax = (price*Quantity)*1.0635;
+							if(code == "999999999")
+								QtyTax = (price*Quantity);
 							double ItemTax = QtyTax-(price*Quantity);
 							
 							insertActor = MyConn.prepareStatement("INSERT INTO InvoiceDetail(InvoiceNumber, ItemCode, ItemName,ItemPrice,Quantity,Tax,ItemTotal,Date) VALUES (?,?,?,?,?,?,?,?)");
@@ -370,31 +420,41 @@ public class Cashier extends HttpServlet {
 						}
 						if(result>0){
 							itemList.clear();
-							Total(-1);
+							//Total(-1);
 							String maxInv = "select max(InvoiceNumber) from InvoiceDetail";
 							int maxInvNum = 0;
 							results = myStmt.executeQuery(maxInv);
 							 while(results.next()){
 								 maxInvNum = results.getInt(1);
 							 }
+							 request.getSession().setAttribute("maxInvNum",maxInvNum);
+							 
+							 	String realPath = getServletContext().getRealPath("/");
+							 	
+								System.out.println(realPath+" k.sdugf");
+								String localPath="/Users/kishanpatel/Desktop/Csc 400/InsertDataWebApplication/";
+								
 							 	Map<String, Object> map = new HashMap<String,Object>();
 								//map.put("maxInvNum", maxInvNum);
-								JasperReport jasperRreort = JasperCompileManager.compileReport("/Users/kishanpatel/Desktop/Csc 400/InsertDataWebApplication/Reports/Invoice_1.jrxml");
-								
+								JasperReport jasperRreort = JasperCompileManager.compileReport(localPath+"Reports/Invoice_1.jrxml");
+
 								JRDataSource dataSource = new JREmptyDataSource();
 								
-								JasperPrint jasperPrint = JasperFillManager.fillReport(jasperRreort, map,MyConn);
+								JasperPrint jasperPrint = (JasperFillManager.fillReport(jasperRreort, map,MyConn));
 								
-								File outDir = new File("/Users/kishanpatel/Desktop/Csc 400/InsertDataWebApplication");
-								outDir.mkdir();
+								File file = new File(localPath);
+								file.mkdir();
 								
-								JasperExportManager.exportReportToPdfFile(jasperPrint, "/Users/kishanpatel/Desktop/Csc 400/InsertDataWebApplication/Reports/Invoice_1.pdf");
-								JasperExportManager.exportReportToPdfFile(jasperPrint, "/Users/kishanpatel/Desktop/Csc 400/InsertDataWebApplication/WebContent/Invoice_1.pdf");
+								//JasperExportManager.exportReportToPdfFile(jasperPrint, "/Users/kishanpatel/Desktop/Csc 400/InsertDataWebApplication/Reports/Invoice_1.pdf");
+								JasperExportManager.exportReportToPdfFile(jasperPrint, localPath+"/WebContent/Invoice_"+maxInvNum+".pdf");
 								
+								//To Open file after its created
+								//Desktop.getDesktop().open(new File("/Users/kishanpatel/Desktop/Csc 400/InsertDataWebApplication/WebContent/Invoice_"+maxInvNum+".pdf"));
+								System.out.println("Done! Creating Reciept");
 								
-								System.out.println("Done! Creating Peciept");
-							request.getRequestDispatcher("/Reg.jsp").forward(request, response);
-					 	
+
+								request.getRequestDispatcher("/Reg.jsp").forward(request, response);
+								//response.getOutputStream().flush();
 						}
 						results.close();
 					 	MyConn.close();
@@ -432,26 +492,23 @@ public class Cashier extends HttpServlet {
 			}
 			
 	}
-	static double Total = 0;
-	static double Tax=0;
-	static double TaxP=1.0635;
-	static double TotalTax=0;
+	 static double Totalsum = 0;
+	
 	public static double Total (double iPrice){
 		
-		if(iPrice!=-1){
-		Total+=iPrice;
-		Tax = Math.round(Total*TaxP*100);
-		TotalTax=Tax/100;
 		
+			if(iPrice!=-1){
+				Totalsum+=iPrice;
+				
+			}
+				else if(iPrice>=-1 && iPrice<0)
+				{
+					Totalsum=0;
+					//System.out.println(Total);
+					return Totalsum=0;
+				}
 		
-		}
-		else if(iPrice>=-1 && iPrice<0)
-		{
-			Total=0;
-			//System.out.println(Total);
-			return Total=0;
-		}
-		return Total;
+		return Totalsum;
 	}
 	
 	
