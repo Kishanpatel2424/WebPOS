@@ -290,12 +290,17 @@ Totalsum = z;
 								 item.setiName(iName);
 								 item.setiPrice(iPrice);
 								 item.setiQty(iQty);
-								 item.setItemTotalTax(iPrice, iQty);
-								 item.setTax(iPrice, iQty);
+								 item.setItemTotalTax(iCode,iPrice, iQty);
+								 item.setTax(iCode,iPrice, iQty);
 								 Total(item.getItemTotalTax());
-								 item.setTotal(Totalsum);
+								 	item.setTotal(Totalsum);
+								 TotalTax(item.getTax());
+								 double z = Math.round(TotalsumTax*100);
+								 z = z/100d;
+								 TotalsumTax = z;
+								 	item.setTotalTax(TotalsumTax);
 								 //Total(iPrice*iQty);
-								 System.out.println(item.getTotal()+" tax per item*qty"+total);
+								 System.out.println(item.getTotal()+" tax per item*qty"+total+" TAX "+item.getTotalTax());
 								 
 								 
 								itemList.add(item);
@@ -370,7 +375,7 @@ Totalsum = z;
 					insertActor.setDouble(1,Totalsum);
 					insertActor.setDouble(2, due);
 					insertActor.setString(3,PaymentType);
-					insertActor.setDouble(4, tax);
+					insertActor.setDouble(4, TotalsumTax);
 					insertActor.setTimestamp(5, timestamp);
 					insertActor.setString(6,"Open");
 					System.out.println(PaymentType+" Payment Type");
@@ -383,7 +388,7 @@ Totalsum = z;
 						
 					}
 					
-					System.out.println("Invoice created total "+Totalsum);
+					//System.out.println("Invoice created total from item.getTotalclass"+item.getTotal()+" from item.getTotalTax "+item.getTotalTax());
 					
 					try{
 						
@@ -391,27 +396,24 @@ Totalsum = z;
 							
 							String code = addItem.iCode;
 							String name = addItem.iName;
-							double price = addItem.iPrice;
-							double Quantity = addItem.iQty;
-							double QtyTax = 0;
-							QtyTax = (price*Quantity)*1.0635;
-							if(code == "999999999")
-								QtyTax = (price*Quantity);
-							double ItemTax = QtyTax-(price*Quantity);
 							
+							
+							
+							item.setItemTotalTax(addItem.iCode,addItem.iPrice, addItem.iQty);//.for total with tax & qty per item
+							item.setTax(addItem.iCode,addItem.iPrice, addItem.iQty);//. for total tax per item
 							insertActor = MyConn.prepareStatement("INSERT INTO InvoiceDetail(InvoiceNumber, ItemCode, ItemName,ItemPrice,Quantity,Tax,ItemTotal,Date) VALUES (?,?,?,?,?,?,?,?)");
 							
 							insertActor.setInt(1, InvoiceNumber);
 							insertActor.setString(2, code);
 							insertActor.setString(3, name);
-							insertActor.setDouble(4, price);
-							insertActor.setDouble(5, Quantity);
-							insertActor.setDouble(6, ItemTax);
-							insertActor.setDouble(7, QtyTax);
+							insertActor.setDouble(4, addItem.iPrice);
+							insertActor.setDouble(5, addItem.iQty);
+							insertActor.setDouble(6, item.getTax());
+							insertActor.setDouble(7, item.getItemTotalTax());
 							insertActor.setTimestamp(8, timestamp);
 							
 							
-							System.out.println("Item add to InvoideDetail with Inv# "+InvoiceNumber+" Item"+name+" Qty"+Quantity+" TTl"+QtyTax);
+							System.out.println("Item add to InvoideDetail with Inv# "+InvoiceNumber+" Item"+name+" Qty"+addItem.iQty+" TTl"+item.getItemTotalTax()+" tax"+item.getTax());
 							result =insertActor.executeUpdate();
 							System.out.println(result+" Execute result");
 							
@@ -420,7 +422,8 @@ Totalsum = z;
 						}
 						if(result>0){
 							itemList.clear();
-							//Total(-1);
+							Total(-1);
+							TotalTax(-1);
 							String maxInv = "select max(InvoiceNumber) from InvoiceDetail";
 							int maxInvNum = 0;
 							results = myStmt.executeQuery(maxInv);
@@ -510,7 +513,23 @@ Totalsum = z;
 		
 		return Totalsum;
 	}
+	static double TotalsumTax = 0;
+	public static double TotalTax (double tax){
+		
+		
+		if(tax!=-1){
+			TotalsumTax+=tax;
+			
+		}
+			else if(tax>=-1 && tax<0)
+			{
+				TotalsumTax=0;
+				//System.out.println(Total);
+				return TotalsumTax=0;
+			}
 	
+	return TotalsumTax;
+}
 	
 
 }

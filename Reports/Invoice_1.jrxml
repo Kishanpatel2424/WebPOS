@@ -59,7 +59,9 @@
 		</queryString>
 	</subDataset>
 	<queryString language="SQL">
-		<![CDATA[select * from InvoiceDetail where InvoiceNumber = (select max(InvoiceNumber) from InvoiceDetail) ]]>
+		<![CDATA[SELECT *  FROM InvoiceDetail
+INNER JOIN Invoice  on InvoiceDetail.InvoiceNumber = Invoice.InvoiceNumber
+WHERE InvoiceDetail.InvoiceNumber = (SELECT max(InvoiceNumber) FROM Invoice)]]>
 	</queryString>
 	<field name="InvoiceNumber" class="java.lang.Integer"/>
 	<field name="ItemCode" class="java.lang.String"/>
@@ -69,6 +71,10 @@
 	<field name="Tax" class="java.lang.Double"/>
 	<field name="ItemTotal" class="java.lang.Double"/>
 	<field name="Date" class="java.sql.Timestamp"/>
+	<field name="InvoiceTotal" class="java.lang.Double"/>
+	<field name="ChangeDue" class="java.lang.Double"/>
+	<field name="PaymentType" class="java.lang.String"/>
+	<field name="Status" class="java.lang.String"/>
 	<variable name="ItemTotal1" class="java.lang.Double" resetType="Page" calculation="Sum">
 		<variableExpression><![CDATA[$F{ItemTotal}]]></variableExpression>
 	</variable>
@@ -182,7 +188,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="22">
+		<band height="21">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement style="Detail" positionType="Float" x="80" y="0" width="127" height="20" uuid="2d1b85d8-c5ae-4784-b4eb-f700cd6bb635"/>
 				<textElement>
@@ -230,46 +236,88 @@
 				<text><![CDATA[THANKYOU FOR YOUR BUSINESS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="345" y="0" width="15" height="20" uuid="530df4fe-89ce-4ee2-b97e-c1122b790c30"/>
+				<reportElement mode="Opaque" x="345" y="30" width="15" height="20" uuid="530df4fe-89ce-4ee2-b97e-c1122b790c30"/>
 				<textElement>
 					<font size="15" isBold="true"/>
 				</textElement>
 				<text><![CDATA[$]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="207" y="0" width="103" height="20" uuid="07d07fb1-d3aa-49f2-8515-fbf38dcd6b15"/>
+				<reportElement x="207" y="30" width="103" height="20" uuid="07d07fb1-d3aa-49f2-8515-fbf38dcd6b15"/>
 				<textElement>
 					<font size="15" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total	]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="414" y="0" width="15" height="20" uuid="6154e9f3-383f-4cb8-a84b-ab04cb53470e"/>
+				<reportElement mode="Opaque" x="414" y="30" width="15" height="20" uuid="6154e9f3-383f-4cb8-a84b-ab04cb53470e"/>
 				<textElement>
 					<font size="15"/>
 				</textElement>
 				<text><![CDATA[$]]></text>
 			</staticText>
 			<textField pattern="#,##0.00#;(#,##0.00#-)">
-				<reportElement mode="Opaque" x="360" y="0" width="54" height="20" uuid="8aced8b4-3c08-4437-9fd1-34c4ecf02bc1"/>
+				<reportElement mode="Opaque" x="360" y="30" width="54" height="20" uuid="8aced8b4-3c08-4437-9fd1-34c4ecf02bc1"/>
 				<textElement>
 					<font size="15"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{Tax1}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00#;(#,##0.00#-)">
-				<reportElement mode="Opaque" x="430" y="0" width="53" height="20" uuid="cb040fe9-1ac4-4da5-b4b9-c3ff6a540b55"/>
+				<reportElement mode="Opaque" x="430" y="30" width="53" height="20" uuid="cb040fe9-1ac4-4da5-b4b9-c3ff6a540b55"/>
 				<textElement>
 					<font size="15"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{ItemTotal1}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="207" y="30" width="103" height="20" uuid="7a0907f7-728a-41c5-9e3d-9ad7bcecd76f"/>
+				<reportElement x="207" y="60" width="103" height="20" uuid="7a0907f7-728a-41c5-9e3d-9ad7bcecd76f"/>
+				<textElement>
+					<font size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Change Due]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="360" y="60" width="80" height="20" uuid="3580b2be-a2f6-4aec-b50a-3f8a8f8760ea"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ChangeDue}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="345" y="90" width="95" height="20" uuid="f6d18bae-470e-4055-80af-c68767c031a7"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PaymentType}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="207" y="90" width="103" height="20" uuid="a6097b7e-0c1c-4100-9dc7-d34c2900675e"/>
 				<textElement>
 					<font size="15" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Payment Type]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="414" y="0" width="69" height="20" forecolor="#000000" uuid="2446185f-6a94-4add-a94a-ad3c9ba18057"/>
+				<textElement>
+					<font fontName="Arial" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="345" y="0" width="69" height="20" forecolor="#000000" uuid="d46228a0-b7fa-4895-8c56-ea6bd2b88dfc"/>
+				<textElement>
+					<font fontName="Arial" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tax]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="345" y="60" width="15" height="20" uuid="57632bfd-33e4-4e58-a7bc-ef0ce6f713c6"/>
+				<textElement>
+					<font size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[$]]></text>
 			</staticText>
 		</band>
 	</lastPageFooter>

@@ -84,7 +84,8 @@ String NotExist = (String)request.getAttribute("NotExist");
 			</th>
 			<th style="width:10%;">
 			
-				Total $  ${Totalsum}
+				Total $  
+				<fmt:formatNumber type="number" maxFractionDigits="2" value="${Totalsum}" />
 				<input type="submit" Value="PAY" name="Tender" class="form-control">
 			</th>
 			

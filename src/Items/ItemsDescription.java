@@ -9,6 +9,7 @@ public class ItemsDescription {
 	public double Tax;
 	public double ItemTotal;
 	public double total; 
+	public double totalTax;
 	
 
 	public void setiCode(String ItemCode){
@@ -35,20 +36,33 @@ public class ItemsDescription {
 	public double getiQty(){
 		return iQty;
 	}
-	//Returns total+tax on each item
-	public void setTax(double iPrice, double iQty){
-		ItemTotal =Tax-(iQty*iPrice);
+	//Returns tax on each item
+	
+	public void setTax(String iCode, double iPrice, double iQty){
+		if(iCode == "999999999"){
+			ItemTotal =0;
+			System.out.println(ItemTotal+" From Item Desc");
+		}
+		else{
+			ItemTotal =this.Tax-(iQty*iPrice);
+			System.out.println(ItemTotal+" From Item Desc");
+		}
 		
 	}
 	public double getTax(){
 		
 		return ItemTotal;
 	}
-	//Returns tax on each item
-	public void setItemTotalTax(double iPrice, double iQty){
-		
-		Tax = Math.round((iQty*iPrice)*1.0635*100);
-		Tax = Tax/100;
+	//Returns total+tax on each item
+	public void setItemTotalTax(String iCode, double iPrice, double iQty){
+		if(iCode == "999999999"){
+			Tax = Math.round((iQty*iPrice)*100.0);
+			Tax = Tax/100;
+		}
+		else{
+			Tax = Math.round((iQty*iPrice)*1.0635*100);
+			Tax = Tax/100;
+		}
 	
 	}
 	public double getItemTotalTax(){
@@ -59,11 +73,19 @@ public class ItemsDescription {
 		
 	}
 	public double getTotal(){
-		System.out.println(this.total+" From Items class");
+		//System.out.println(this.total+" From Items class");
 		
 		return this.total;
 	}
-	
+	public void setTotalTax(double calcTotalTax){
+		totalTax = calcTotalTax;
+		
+	}
+	public double getTotalTax(){
+		//System.out.println(this.totalTax+" From Items class tax");
+		
+		return this.totalTax;
+	}
 	
 
 }

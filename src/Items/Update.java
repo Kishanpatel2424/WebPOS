@@ -42,7 +42,7 @@ public class Update extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		Connection MyConn=null;
-		PreparedStatement UpdateActor= null;
+		PreparedStatement UpdateActor, ps = null;
 		ResultSet rs = null;
 		Statement myStmt=null;
 		
@@ -84,9 +84,11 @@ public class Update extends HttpServlet {
 
 				MyConn = ConnectionManager.getConnection();
 				 myStmt = MyConn.createStatement();
-				String Check = ("SELECT COUNT(ItemCode) FROM Item WHERE ItemCode ="+iCode);
-				 rs = myStmt.executeQuery(Check);
-				 
+				String sqlStatement = ("SELECT COUNT(ItemCode) FROM Item WHERE ItemCode =?");
+				 ps = MyConn.prepareStatement(sqlStatement);
+			      ps.setString(1, iCode);
+			       
+			       rs = ps.executeQuery();
 				while(rs.next()){
 			        	if(rs.getInt(1)<=0){
 			        		System.out.println("Item Dose not Exist with BarCode "+iCode);
@@ -94,10 +96,11 @@ public class Update extends HttpServlet {
 			        		request.getRequestDispatcher("Update.jsp").forward(request, response);
 			        	// AddItem = false;
 			        	}
-			       String search = ("SELECT * FROM Item WHERE ItemCode ="+iCode);
+			        sqlStatement = ("SELECT * FROM Item WHERE ItemCode =?");
+			       ps = MyConn.prepareStatement(sqlStatement);
+			       ps.setString(1, iCode);
 			       
-			       
-			       rs = myStmt.executeQuery(search);
+			       rs = ps.executeQuery();
 			        if(rs.next()){
 			        		System.out.println("Item Found "+iCode);
 			        		

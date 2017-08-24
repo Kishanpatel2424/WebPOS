@@ -46,34 +46,46 @@ public class DeleteItems extends HttpServlet {
 			final String USER="root";
 			final String PASS ="root";
 			*/
-			PrintWriter out = response.getWriter();
-			Connection MyConn = null;
-			response.setContentType("text/html");
+			
+			
+			
+	}
+	 protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	 
+		 Connection MyConn = null;
+			PreparedStatement ps=null;
+			
 			String qryStr = "", qryStr1 = "";
-		    Statement stmt = null;
+		    
 		    ResultSet rs = null;
 		    int DeleteActor;
 			
 				try {
 					
 					 MyConn = ConnectionManager.getConnection();
-					 stmt = MyConn.createStatement();
+					 
 					 
 						if(request.getParameter("iCode") != null){
 							 String iCode = request.getParameter("iCode");
-							 qryStr = "SELECT * from Item WHERE ItemCode ="+iCode;
 							 
-							 qryStr1 = "DELETE FROM Item WHERE ItemCode ="+ iCode;
-							
-						}
-				      DeleteActor = stmt.executeUpdate(qryStr1);
-			      
-				      if(DeleteActor>0){
-				    	  
-				      	request.setAttribute("Product Deleted","Product Deleted");
-						 request.getRequestDispatcher("DeleteItems.jsp").forward(request, response); 
-						 //response.sendRedirect("/InsertDataWebApplication/DeleteItems.jsp");
-				      }
+							 qryStr = "DELETE FROM Item WHERE ItemCode =?";
+							 ps = MyConn.prepareStatement(qryStr);
+							 ps.setString(1, iCode);
+						     int result = ps.executeUpdate();
+						     System.out.println(result+" results");
+
+						    	  if(result ==1){
+						    		 System.out.println("Barcode Fount "+iCode);
+						    		 request.setAttribute("Product Deleted","Product Deleted");
+						    		 request.getRequestDispatcher("/DeleteItems.jsp").forward(request, response);
+						    	 }
+						    	  else if(result == 0 || result != 1){
+						    		  System.out.println("Barcode not Found "+iCode);
+							    		 request.setAttribute("Product Not Found","Product Not Found");
+							    		 request.getRequestDispatcher("/DeleteItems.jsp").forward(request, response); 
+						    	  }
+						 
+						}			
 				//Statement myStmt = MyConn.createStatement();
 			     
 				
@@ -81,28 +93,12 @@ public class DeleteItems extends HttpServlet {
 			} catch (InstantiationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
+			}
+		    catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		    catch(SQLException e) {
-		      out.println("SQLException caught: " + e.getMessage());
-		    } catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			finally {
-				ConnectionManager.closeConnection(MyConn);
-			      // Always close the database connection.
-			      try {
-			        if (MyConn != null) MyConn.close();
-			      }
-			      catch (SQLException ignored) { }
-			   }
-	}
+	 }
 
 	
 		

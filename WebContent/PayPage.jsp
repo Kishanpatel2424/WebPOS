@@ -69,7 +69,7 @@ function simplifyResponseHandler(data) {
     <div data-role="popup" id="myPopup" class="ui-content" style="min-width:250px;">
       <form method="post" action="/InsertDataWebApplication/Cashier">
         <div>
-          <h3>Amount Due:-$ &nbsp ${TotalTax}</h3>
+          <h3>Amount Due:-$ &nbsp <fmt:formatNumber type="number" maxFractionDigits="2" value="${TotalTax}" /></h3>
           <label for="usrnm" class="ui-hidden-accessible">Username:</label>
           <input type="number" name="Amount" step="0.01" id="Amount" value="${TotalTax}">
           <input type="number" value="1"name="Type" style="visibility:hidden"/>
@@ -82,7 +82,7 @@ function simplifyResponseHandler(data) {
     <div data-role="popup" id="myPopup1" class="ui-content" style="min-width:250px;">
       <form method="post" action="/InsertDataWebApplication/Cashier">
         <div>
-          <h3>Amount Due:-$ &nbsp ${TotalTax}</h3>
+          <h3>Amount Due:-$ <fmt:formatNumber type="number" maxFractionDigits="2" value="${TotalTax}" /></h3>
           <label for="usrnm" class="ui-hidden-accessible">Username:</label>
           <input type="number" name="Amount" step="0.01" id="Amount" value="${TotalTax}">
           <input type="number" value="2"name="Type" style="visibility:hidden"/>

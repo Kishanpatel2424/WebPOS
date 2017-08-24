@@ -62,6 +62,7 @@ public class AddItems extends HttpServlet {
 		PrintWriter pw = response.getWriter();
 		String title="Database connect";
 		pw.println(getServletInfo());
+		PreparedStatement ps =null;
 		
 		boolean submitButtonPressed = request.getParameter("Addsubmit") != null;
 		boolean AddItem = true;
@@ -118,10 +119,11 @@ public class AddItems extends HttpServlet {
 				
 				
 				MyConn = ConnectionManager.getConnection();
-				Statement myStmt = MyConn.createStatement();
-				String Check = ("SELECT COUNT(ItemCode) FROM Item WHERE ItemCode ="+iCode);
-		         
-		         ResultSet rs = myStmt.executeQuery(Check);
+				//Statement myStmt = MyConn.createStatement();
+				String sqlStatement = ("SELECT COUNT(ItemCode) FROM Item WHERE ItemCode =?");
+				ps = MyConn.prepareStatement(sqlStatement);
+				ps.setString(1, iCode);
+		         ResultSet rs = ps.executeQuery();
 		         
 		        while(rs.next()){
 		        	if(rs.getInt(1)>0){

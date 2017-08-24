@@ -60,7 +60,7 @@ public class Login extends HttpServlet {
 				
 				try {
 					 MyConn = ConnectionManager.getConnection();
-					 myStmt = MyConn.createStatement();
+					 //myStmt = MyConn.createStatement();
 					 
 					 String sqlStatement = "select * from User where user_Name =? and user_Password =?";
 					 ps = MyConn.prepareStatement(sqlStatement);

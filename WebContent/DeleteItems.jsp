@@ -15,6 +15,7 @@
 <center><h1>Delete Item</h1></center>
 <%
 	String succ = (String)request.getAttribute("Product Deleted");
+	String NotFound = (String)request.getAttribute("Product Not Found");
 	if(succ!= null){
 		%>
 		 <script type="text/javascript">
@@ -22,13 +23,13 @@
 	    alert(msg);
 	</script><%
 	}
-%>
-<%
-	if(request.getAttribute("iName")!=null)
-	{
+	
+	if(NotFound!= null){
 		%>
-		<h3><%= request.getAttribute("iName")%></h3>
-		<%
+		 <script type="text/javascript">
+	    var msg = "<%=NotFound%>";
+	    alert(msg);
+	</script><%
 	}
 %>
 
@@ -36,7 +37,7 @@
 
 <div class="row">
     <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-		<form name="MyForm" action="/InsertDataWebApplication/DeleteItems" method="GET" role="form">
+		<form name="MyForm" action="/InsertDataWebApplication/DeleteItems" method="POST" role="form">
 			<h2>Delete an Item </h2>
 			<hr class="colorgraph">
 			<div class="row">
