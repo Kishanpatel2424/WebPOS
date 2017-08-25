@@ -39,7 +39,7 @@ public class ItemsDescription {
 	//Returns tax on each item
 	
 	public void setTax(String iCode, double iPrice, double iQty){
-		if(iCode == "999999999"){
+		if(iCode == "NonTax"){
 			ItemTotal =0;
 			System.out.println(ItemTotal+" From Item Desc");
 		}
@@ -55,7 +55,7 @@ public class ItemsDescription {
 	}
 	//Returns total+tax on each item
 	public void setItemTotalTax(String iCode, double iPrice, double iQty){
-		if(iCode == "999999999"){
+		if(iCode == "NonTax"){
 			Tax = Math.round((iQty*iPrice)*100.0);
 			Tax = Tax/100;
 		}

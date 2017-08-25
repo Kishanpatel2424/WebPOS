@@ -120,18 +120,18 @@ public class Cashier extends HttpServlet {
 			System.out.println(request.getParameter("ItemCode")+" Value from Search");
 			
 			iCode = request.getParameter("ItemCode");
-			Q = "1";
+			Q = request.getParameter(("Quantity"));
 			Search = true;
 		}
 		//System.out.println(request.getParameter("taxItemValue")+" Tax Value");
 		//Check if tax item is pressed
 		if(taxItem){
-			iCode="999999998";
+			iCode="Tax";
 			Q = request.getParameter(("Quantity"));
 			Search = true;
 		}
 		if(nonTaxItem){
-			iCode ="999999999";
+			iCode ="NonTax";
 			Q = request.getParameter(("Quantity"));
 			Search= true;
 		}
@@ -248,8 +248,12 @@ Totalsum = z;
 							   
 							  iQty = Double.parseDouble(Q);
 							  System.out.println(iCode+" Value from Search to Reg"+Q+" "+iQty);
-							  String Check = ("SELECT COUNT(ItemCode) FROM Item WHERE ItemCode ="+iCode);
-							  results = myStmt.executeQuery(Check);
+							  String Check = ("SELECT COUNT(ItemCode) FROM Item WHERE ItemCode =?");
+							  
+							  PreparedStatement ps = MyConn.prepareStatement(Check);
+							  ps.setString(1, iCode);
+							  results = ps.executeQuery();
+							  
 								 
 								while(results.next()){
 							        	if(results.getInt(1)<=0){
@@ -259,11 +263,12 @@ Totalsum = z;
 							        	// AddItem = false;
 							        	}	  
 						
-						String sqlStatement = ("select * From Item where ItemCode ="+iCode);
+						 Check = ("select * From Item where ItemCode =?");
 						
 						//Statement
-						
-						 results = myStmt.executeQuery(sqlStatement);
+						ps = MyConn.prepareStatement(Check);
+						ps.setString(1, iCode);
+						results = ps.executeQuery();
 						 
 							 // item = new ItemsDescription();
 							
@@ -272,13 +277,13 @@ Totalsum = z;
 								 iName = results.getString("ItemName");
 								 iPrice=results.getDouble("ItemPrice");
 								
-								 if(iCode == "999999998")	
+								 if(iCode == "Tax")	
 									 {
 									 	iPrice = Double.parseDouble(request.getParameter("taxItemValue"));
 									 	System.out.println(iCode+" Tax Item Price Overwritten"+iPrice);
 									 	
 									 }
-								 else if (iCode == "999999999")
+								 else if (iCode == "NonTax")
 								 {
 									 	iPrice = Double.parseDouble(request.getParameter("nonTaxItemValue"));
 									 	System.out.println(iCode+" Non Tax Item Price Overwritten"+iPrice);
