@@ -116,11 +116,12 @@ public class Cashier extends HttpServlet {
 		iCode = request.getParameter("iCode");
 		Q = request.getParameter(("Quantity"));
 		String PaymentType="";
+		
 		if(request.getParameter("ItemCode") !=null){
 			System.out.println(request.getParameter("ItemCode")+" Value from Search");
 			
 			iCode = request.getParameter("ItemCode");
-			Q = request.getParameter(("Quantity"));
+			Q ="1";
 			Search = true;
 		}
 		//System.out.println(request.getParameter("taxItemValue")+" Tax Value");
@@ -130,7 +131,7 @@ public class Cashier extends HttpServlet {
 			Q = request.getParameter(("Quantity"));
 			Search = true;
 		}
-		if(nonTaxItem){
+		if(nonTaxItem || iCode=="NonTax"){
 			iCode ="NonTax";
 			Q = request.getParameter(("Quantity"));
 			Search= true;
@@ -278,16 +279,24 @@ Totalsum = z;
 								 iPrice=results.getDouble("ItemPrice");
 								
 								 if(iCode == "Tax")	
-									 {
-									 	iPrice = Double.parseDouble(request.getParameter("taxItemValue"));
+								 {
+									 if(request.getParameter("taxItemValue").toString() == "" || request.getParameter("taxItemValue").toString() == null)
+										 iPrice = 1.0;
+									 else
+										 iPrice = Double.parseDouble(request.getParameter("taxItemValue"));
+									 	
 									 	System.out.println(iCode+" Tax Item Price Overwritten"+iPrice);
 									 	
-									 }
+								 }
 								 else if (iCode == "NonTax")
 								 {
-									 	iPrice = Double.parseDouble(request.getParameter("nonTaxItemValue"));
+									 if(request.getParameter("nonTaxItemValue").toString() == "" || request.getParameter("nonTaxItemValue").toString() == null)
+										 iPrice = 1.0;
+									 else
+										 iPrice = Double.parseDouble(request.getParameter("nonTaxItemValue"));
+
 									 	System.out.println(iCode+" Non Tax Item Price Overwritten"+iPrice);
-									 	
+									 	iCode = "NonTax";
 									 	
 								 }
 								 
@@ -422,6 +431,11 @@ Totalsum = z;
 							result =insertActor.executeUpdate();
 							System.out.println(result+" Execute result");
 							
+							PreparedStatement ps = MyConn.prepareStatement("Update Item set QuantityOnHand =QuantityOnHand-? where ItemCode =?");
+							ps.setDouble(1, addItem.iQty);
+							ps.setString(2, code);
+							
+							ps.executeUpdate();
 							
 							
 						}
@@ -457,7 +471,7 @@ Totalsum = z;
 								JasperExportManager.exportReportToPdfFile(jasperPrint, localPath+"/WebContent/Invoice_"+maxInvNum+".pdf");
 								
 								//To Open file after its created
-								//Desktop.getDesktop().open(new File("/Users/kishanpatel/Desktop/Csc 400/InsertDataWebApplication/WebContent/Invoice_"+maxInvNum+".pdf"));
+								//Desktop.getDesktop().open(new File(realPath+"WebContent/Invoice_"+maxInvNum+".pdf"));
 								System.out.println("Done! Creating Reciept");
 								
 

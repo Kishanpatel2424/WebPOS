@@ -61,6 +61,7 @@
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection conn = null;
                 conn = DriverManager.getConnection("jdbc:mysql://localhost:8889/test", "root", "root");
+                //conn = DriverManager.getConnection("jdbc:mysql://node23113-env-9184706.njs.jelastic.vps-host.net/test","root","J3rV6IO75S");
                 Statement stmt = null;
                 stmt = conn.createStatement();
                 String SearchList =request.getParameter("SearchList");

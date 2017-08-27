@@ -57,9 +57,29 @@
 	    	 else
 	         	document.getElementById('iCost').value = result;
 	     }
+	     
+	     var iCost = document.getElementById('iCost').value;
+	     var iPrice = document.getElementById('iPrice').value;
+	     var result1 = (parseFloat(iPrice-iCost) / parseFloat(iPrice));
+	     result1	=	(result1*100.0).toFixed(2);
+	     
+	     if (!isNaN(result1)) {
+	    	 if(document.getElementById('iCost').value!=null)
+	    		 {
+	    		 document.getElementById('GP').value = result1;
+	    		 }
+	    	 else
+	         	document.getElementById('GP').value = result1;
+	     }
+	     
 	 }
-	 
+	
+  function sumGP() {
+	     
+	 }
+
 </script>
+
 <body>
 	
 
@@ -122,7 +142,7 @@
 			<div class="row">
 				<div class="col-xs-12 col-sm-4 col-md-4">
 					<div class="form-group">Sell Price
-						<input type="number" step=0.01 id="iPrice" name="iPrice"  class="form-control input-lg" placeholder="Item Sell Price" tabindex="5">
+						<input type="number" step=0.01 id="iPrice" name="iPrice"  onKeyUp="sum()" class="form-control input-lg" placeholder="Item Sell Price" tabindex="5">
 					</div>
 				</div>
 				<div class="col-xs-12 col-sm-4 col-md-4">
@@ -131,7 +151,7 @@
 					</div>
 				</div>
 				<div class="col-xs-12 col-sm-4 col-md-4">
-					<div class="form-group">Gross Profit%
+					<div class="form-group">GP Margin
 						<input type="number" step=0.01 id="GP" name="GP" onkeyup="" class="form-control input-lg" placeholder="Gross Profit" tabindex="7">
 					</div>
 				</div>

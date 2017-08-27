@@ -40,12 +40,12 @@ public class ItemsDescription {
 	
 	public void setTax(String iCode, double iPrice, double iQty){
 		if(iCode == "NonTax"){
-			ItemTotal =0;
-			System.out.println(ItemTotal+" From Item Desc");
+			this.ItemTotal =0;
+			System.out.println(this.ItemTotal+" From Item Desc");
 		}
 		else{
-			ItemTotal =this.Tax-(iQty*iPrice);
-			System.out.println(ItemTotal+" From Item Desc");
+			this.ItemTotal =this.Tax-(iQty*iPrice);
+			System.out.println(this.ItemTotal+" From Item Desc");
 		}
 		
 	}
