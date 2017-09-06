@@ -87,7 +87,7 @@ public class AddItems extends HttpServlet {
 			}
 			
 			if(request.getParameter("iCode") != null){
-				 iCode =request.getParameter("iCode").trim();
+				 iCode =request.getParameter("iCode").toUpperCase();
 				 iName = request.getParameter("iName");
 				 Department = request.getParameter("Department");
 				 Price = (request.getParameter("iPrice"));

@@ -18,9 +18,10 @@ font-size:20px;
 }
 </style>
 		<body>
+		
 		<nav class="navbar navbar-default">
 		<div align="center">
-
+			
   			<div>
   			
         		<a href="/InsertDataWebApplication/AddItem.jsp" id="Add" class="btn btn-success" >Add Items</a>
@@ -28,6 +29,8 @@ font-size:20px;
         		<a href="/InsertDataWebApplication/DeleteItems.jsp" id="Delete" class="btn btn-danger" >Delete Items</a>
         		<a href="/InsertDataWebApplication/Update.jsp" id="Update" class="btn btn-warning" >Update Items</a>
 				<a href="/InsertDataWebApplication/Reports.jsp" id="Report" class="btn btn-warning" >Reports</a>
+				<a class="btn btn-danger"><form action="<%=response.encodeURL("LogoutServlet") %>" method="post">
+				<input type="submit"class="btn btn-danger btn btn-primary btn-xs" value="LogOut" ></form></a>
 			</div>
 
 		</div>

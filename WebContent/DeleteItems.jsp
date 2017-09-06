@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -13,6 +14,22 @@
 </head>
 <body>
 <center><h1>Delete Item</h1></center>
+
+<%
+String userName = null;
+//allow access only if session exists
+if(session.getAttribute("user") == null || session.getAttribute("user").equals("Cashier")){
+	response.sendRedirect("/InsertDataWebApplication/index.jsp");
+}else userName = (String) session.getAttribute("user");
+String sessionID = null;
+Cookie[] cookies = request.getCookies();
+if(cookies !=null){
+for(Cookie cookie : cookies){
+	if(cookie.getName().equals("user")) userName = cookie.getValue();
+}
+}
+%>
+
 <%
 	String succ = (String)request.getAttribute("Product Deleted");
 	String NotFound = (String)request.getAttribute("Product Not Found");

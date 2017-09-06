@@ -92,7 +92,7 @@ return true;
 <body>
   <div class="login">
 	<h1>Login</h1>
-    <form name="form" method="post" action="/InsertDataWebApplication/Login" onsubmit="javascript:return validate();">
+    <form name="form" method="post" action="/InsertDataWebApplication/LoginServlet" onsubmit="javascript:return validate();">
     	<input type="text" name="Username" placeholder="Username" value="" required="required" />
         <input type="password" name="Password" placeholder="Password" value="" required="required" />
         <input type="submit" value="Log In" name="submit"class="btn btn-primary btn-block btn-large">

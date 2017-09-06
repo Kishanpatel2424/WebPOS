@@ -39,7 +39,7 @@ public class ItemsDescription {
 	//Returns tax on each item
 	
 	public void setTax(String iCode, double iPrice, double iQty){
-		if(iCode == "NonTax"){
+		if(iCode == "NonTax" || iCode == "Bottle Deposit" || iCode == "Return Deposit"){
 			this.ItemTotal =0;
 			System.out.println(this.ItemTotal+" From Item Desc");
 		}
@@ -55,7 +55,7 @@ public class ItemsDescription {
 	}
 	//Returns total+tax on each item
 	public void setItemTotalTax(String iCode, double iPrice, double iQty){
-		if(iCode == "NonTax"){
+		if(iCode == "NonTax" || iCode == "Bottle Deposit" || iCode == "Return Deposit"){
 			Tax = Math.round((iQty*iPrice)*100.0);
 			Tax = Tax/100;
 		}

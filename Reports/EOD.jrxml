@@ -67,33 +67,39 @@ Group BY PaymentType]]>
 	<field name="PaymentType" class="java.lang.String"/>
 	<field name="SUM(InvoiceTotal)" class="java.lang.Double"/>
 	<field name="SUM(Tax)" class="java.lang.Double"/>
+	<variable name="SUM(Tax)1" class="java.lang.Double" resetType="Page" calculation="Sum">
+		<variableExpression><![CDATA[$F{SUM(Tax)}]]></variableExpression>
+	</variable>
+	<variable name="SUM(InvoiceTotal)1" class="java.lang.Double" resetType="Page" calculation="Sum">
+		<variableExpression><![CDATA[$F{SUM(InvoiceTotal)}]]></variableExpression>
+	</variable>
 	<group name="Gruppo1">
 		<groupExpression><![CDATA[$F{COUNT(PaymentType)}]]></groupExpression>
 		<groupHeader>
 			<band height="36">
 				<textField isBlankWhenNull="true">
-					<reportElement positionType="Float" x="0" y="0" width="100" height="20" forecolor="#000000" uuid="7704da8a-15f5-49a1-9c4c-5fa682bd4652"/>
+					<reportElement positionType="Float" x="50" y="0" width="100" height="20" forecolor="#000000" uuid="7704da8a-15f5-49a1-9c4c-5fa682bd4652"/>
 					<textElement>
 						<font fontName="Arial" size="16" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{COUNT(PaymentType)}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement positionType="Float" x="120" y="0" width="100" height="20" forecolor="#000000" uuid="4a9f8ca7-a5fc-4a4f-9289-d5cfbb98b89f"/>
+					<reportElement positionType="Float" x="170" y="0" width="100" height="20" forecolor="#000000" uuid="4a9f8ca7-a5fc-4a4f-9289-d5cfbb98b89f"/>
 					<textElement>
 						<font fontName="Arial" size="16" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{PaymentType}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement positionType="Float" x="240" y="0" width="100" height="20" forecolor="#000000" uuid="108db206-45b7-4ed2-bc27-450ecd88928f"/>
+					<reportElement positionType="Float" x="290" y="0" width="100" height="20" forecolor="#000000" uuid="108db206-45b7-4ed2-bc27-450ecd88928f"/>
 					<textElement>
 						<font fontName="Arial" size="16" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{SUM(InvoiceTotal)}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement positionType="Float" x="360" y="0" width="100" height="20" forecolor="#000000" uuid="ee577037-6e7f-4f33-b396-c1c20f7a2786"/>
+					<reportElement positionType="Float" x="410" y="0" width="100" height="20" forecolor="#000000" uuid="ee577037-6e7f-4f33-b396-c1c20f7a2786"/>
 					<textElement>
 						<font fontName="Arial" size="16" isBold="true"/>
 					</textElement>
@@ -118,65 +124,13 @@ Group BY PaymentType]]>
 		<groupExpression><![CDATA[$F{SUM(Tax)}]]></groupExpression>
 	</group>
 	<title>
-		<band height="175" splitType="Stretch">
-			<staticText>
-				<reportElement x="0" y="90" width="84" height="25" uuid="57aed2b1-4f4e-40a3-a6ad-54dae8dd4c5a">
-					<property name="local_mesure_unitheight" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<textElement>
-					<font size="16" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Bill to:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="115" width="120" height="15" uuid="33274f5d-5b7e-4be2-a2ff-65d452a618ed"/>
-				<text><![CDATA[ABC Company]]></text>
-			</staticText>
+		<band height="142" splitType="Stretch">
 			<line>
 				<reportElement x="0" y="80" width="556" height="1" uuid="806ce5df-1219-4876-ae0c-ca7405b1f246">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 			</line>
-			<staticText>
-				<reportElement x="0" y="130" width="120" height="15" uuid="1d3045ed-03d6-4253-a959-aeeb491b73ca"/>
-				<text><![CDATA[Company Address]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="145" width="120" height="15" uuid="235bf8b6-1e1e-49c7-b59f-7a46c30b8209"/>
-				<text><![CDATA[Company state1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="160" width="120" height="15" uuid="665f25c2-8663-4951-b699-1ab863bdeb76"/>
-				<text><![CDATA[Company state 2]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="410" y="145" width="120" height="15" uuid="b62092ec-9053-4f27-b387-9b25d2909a68"/>
-				<text><![CDATA[Ship state1]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="410" y="115" width="120" height="15" uuid="edbd74ac-0cbd-44c9-8a8e-ccf745191172"/>
-				<text><![CDATA[Ship name]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="410" y="90" width="84" height="25" uuid="139ebe8d-25b0-411e-986c-270015400874">
-					<property name="local_mesure_unitheight" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<textElement>
-					<font size="16" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Ship to:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="410" y="160" width="120" height="15" uuid="dd52166a-1135-4931-adef-51e7972118bc"/>
-				<text><![CDATA[Ship state 2]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="410" y="130" width="120" height="15" uuid="2d2f365d-7b12-4a8f-990d-ff528a2660bc"/>
-				<text><![CDATA[Ship Address]]></text>
-			</staticText>
 			<staticText>
 				<reportElement x="415" y="10" width="50" height="20" uuid="0f86baff-6386-4f3f-b3fe-2388707babe8"/>
 				<box rightPadding="4"/>
@@ -187,10 +141,6 @@ Group BY PaymentType]]>
 				<reportElement x="465" y="10" width="84" height="20" uuid="bb10dbe1-0a4f-4722-9953-c163b63cf979"/>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
-			<image hAlign="Center">
-				<reportElement x="0" y="0" width="65" height="60" uuid="94883631-a913-43e2-b182-ab8d77d0181e"/>
-				<imageExpression><![CDATA["invoice_logo.png"]]></imageExpression>
-			</image>
 			<textField pattern="EEEEE dd MMMMM yyyy">
 				<reportElement x="465" y="30" width="84" height="20" uuid="3836ce65-eca3-4cad-a6de-b1818def0a2b"/>
 				<textFieldExpression><![CDATA["INV0001"]]></textFieldExpression>
@@ -223,33 +173,54 @@ Group BY PaymentType]]>
 				<reportElement x="95" y="40" width="205" height="15" uuid="b96f7183-44f8-43ad-ba60-43d8fbf50b6e"/>
 				<text><![CDATA[City, street, ZIP code]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="80" y="80" width="100" height="30" uuid="e4a357f6-5457-4fd6-9731-a194282aba6d"/>
+				<text><![CDATA[Invoice #]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="80" width="100" height="30" uuid="cefa6403-9832-42fb-bd1f-9d77ec54d13e"/>
+				<text><![CDATA[Invoice Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="80" width="100" height="30" uuid="b7bb65a1-ef77-4990-a97a-67c72136e55e"/>
+				<text><![CDATA[Tax Invoice]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="80" width="100" height="30" uuid="e5147dd0-0df7-49df-8bd2-42d69a756519"/>
+				<text><![CDATA[Payment Type]]></text>
+			</staticText>
+			<subreport>
+				<reportElement x="0" y="110" width="556" height="32" uuid="58ddfa4e-b295-4d38-824b-eb5787c4ff26"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["Reports/SumEOD.jasper"]]></subreportExpression>
+			</subreport>
 		</band>
 	</title>
 	<columnHeader>
 		<band height="35">
 			<staticText>
-				<reportElement x="0" y="10" width="100" height="20" uuid="449c05b6-c5d2-4f6e-8d1f-c96323df0d31"/>
+				<reportElement x="50" y="10" width="100" height="20" uuid="449c05b6-c5d2-4f6e-8d1f-c96323df0d31"/>
 				<textElement>
 					<font size="14"/>
 				</textElement>
 				<text><![CDATA[# Of Transmissions	]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="120" y="10" width="100" height="20" uuid="2638c59b-1d60-4cd3-8999-e40afde901f0"/>
+				<reportElement x="170" y="10" width="100" height="20" uuid="2638c59b-1d60-4cd3-8999-e40afde901f0"/>
 				<textElement>
 					<font size="14"/>
 				</textElement>
 				<text><![CDATA[Payment Type]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="360" y="10" width="100" height="20" uuid="e57f48e3-7e87-4835-8592-86ef2f09dc71"/>
+				<reportElement x="410" y="10" width="100" height="20" uuid="e57f48e3-7e87-4835-8592-86ef2f09dc71"/>
 				<textElement>
 					<font size="14"/>
 				</textElement>
 				<text><![CDATA[Total Tax]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="240" y="10" width="100" height="20" uuid="d95fb850-c807-4e41-b22d-5ddd6d8eedbd"/>
+				<reportElement x="290" y="10" width="100" height="20" uuid="d95fb850-c807-4e41-b22d-5ddd6d8eedbd"/>
 				<textElement>
 					<font size="14"/>
 				</textElement>
@@ -257,27 +228,28 @@ Group BY PaymentType]]>
 			</staticText>
 		</band>
 	</columnHeader>
-	<detail>
-		<band height="20"/>
-	</detail>
 	<lastPageFooter>
 		<band height="177">
-			<staticText>
-				<reportElement positionType="Float" x="-1" y="30" width="261" height="101" uuid="1a0d7088-5af7-4865-8be1-41ec5f51fb36"/>
-				<box>
-					<topPen lineWidth="1.1" lineStyle="Dashed"/>
-					<leftPen lineWidth="1.1" lineStyle="Dashed"/>
-					<bottomPen lineWidth="1.1" lineStyle="Dashed"/>
-					<rightPen lineWidth="1.1" lineStyle="Dashed"/>
-				</box>
-				<text><![CDATA[Your notes here]]></text>
-			</staticText>
-			<staticText>
-				<reportElement positionType="Float" mode="Opaque" x="0" y="147" width="556" height="30" backcolor="#E6E8E9" uuid="36aa233d-4305-48e6-974a-1bbf89bb3c8f"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Serif" size="9" isItalic="true"/>
+			<textField pattern="#,##0.00#">
+				<reportElement x="410" y="0" width="100" height="30" uuid="de06ec36-4cf8-48a3-8949-2c0020f19226"/>
+				<textElement>
+					<font size="16"/>
 				</textElement>
-				<text><![CDATA[THANKYOU FOR YOUR BUSINESS]]></text>
+				<textFieldExpression><![CDATA[$V{SUM(Tax)1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00#">
+				<reportElement x="290" y="0" width="100" height="30" uuid="c3c8dc39-2f84-4daa-b6b3-a7208e4798cc"/>
+				<textElement>
+					<font size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{SUM(InvoiceTotal)1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="170" y="0" width="100" height="30" uuid="baa4d08b-2c08-4ab9-8456-d68db24e0e0d"/>
+				<textElement>
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[Total:-]]></text>
 			</staticText>
 		</band>
 	</lastPageFooter>

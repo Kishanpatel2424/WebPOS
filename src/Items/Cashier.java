@@ -1,10 +1,10 @@
 package Items;
 
-import java.awt.Desktop;
+
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -17,36 +17,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfWriter;
-import com.sun.xml.internal.txw2.Document;
+import javax.servlet.http.HttpSessionEvent;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JREmptyDataSource;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporter;
-import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.data.JRXmlDataSource;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
 /**
  * Servlet implementation class Cashier
  */
@@ -76,14 +62,17 @@ public class Cashier extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@SuppressWarnings("resource")
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 		Connection MyConn =null;
 		Statement myStmt =null;
 		PreparedStatement insertActor;
+		HttpSession session = request.getSession();
 		
-		response.setContentType("text/html");
+		PrintWriter pw = response.getWriter();
 		
 		ResultSet results = null;
 		ItemsDescription item =null;
@@ -111,19 +100,42 @@ public class Cashier extends HttpServlet {
 		boolean Process = request.getParameter("Process") !=null;
 		boolean approved=false;
 		
+		String id=null;
+			
 		String iCode=null;
 		String Q=null;
-		iCode = request.getParameter("iCode");
-		Q = request.getParameter(("Quantity"));
 		String PaymentType="";
 		
-		if(request.getParameter("ItemCode") !=null){
-			System.out.println(request.getParameter("ItemCode")+" Value from Search");
-			
-			iCode = request.getParameter("ItemCode");
+		iCode = request.getParameter("iCode");
+		Q = request.getParameter(("Quantity"));
+		
+		Cookie[] cookies = request.getCookies();
+
+		if(cookies !=null){
+			for(Cookie cookie : cookies){
+				System.out.println(cookie.getValue());
+				if(cookie.getName().equals("OldSessionId")) {
+					id = cookie.getValue();
+					
+					if(id != session.getId()){
+						System.out.println(id+" id &&& session.id "+session.getId());
+						id =(session.getId());
+					cookie.setValue(id);
+					}
+					System.out.println(cookie.getValue());
+				}
+			}
+		}
+		
+		if(id == session.getId()){
+			System.out.println(id+"lets do this");
+		}
+		//this is from SearchList.jsp Page
+			if(request.getParameter("ItemCode") != null){
+			iCode = request.getParameter("ItemCode").toUpperCase();
 			Q ="1";
 			Search = true;
-		}
+			}
 		//System.out.println(request.getParameter("taxItemValue")+" Tax Value");
 		//Check if tax item is pressed
 		if(taxItem){
@@ -131,7 +143,7 @@ public class Cashier extends HttpServlet {
 			Q = request.getParameter(("Quantity"));
 			Search = true;
 		}
-		if(nonTaxItem || iCode=="NonTax"){
+		if(nonTaxItem){
 			iCode ="NonTax";
 			Q = request.getParameter(("Quantity"));
 			Search= true;
@@ -145,8 +157,8 @@ public class Cashier extends HttpServlet {
 			 Total(-1);
 			 item.setTotal(0);
 			System.out.println(Totalsum);
-			 request.getSession().setAttribute("Clear", "Clear");
-			 request.setAttribute("TotalTax", Totalsum);
+			 session.setAttribute("Clear", "Clear");
+			 session.setAttribute("TotalTax", Totalsum);
 			 request.getRequestDispatcher("/Reg.jsp").forward(request, response);
 				 
 			 approved=false;
@@ -171,7 +183,7 @@ Totalsum = z;
 					
 					System.out.println(item.getTotal()+" After delete "+a+" TotalSum value is "+z);
 				}
-				 request.getSession().setAttribute("Totalsum", Totalsum);
+				 session.setAttribute("Totalsum", Totalsum);
 				request.getRequestDispatcher("/Reg.jsp").forward(request, response);
 				
 			}
@@ -193,8 +205,8 @@ Totalsum = z;
 						due =0;
 						
 						System.out.println("Amount Paid "+Totalsum);
-						request.setAttribute("due", due);
-						request.setAttribute("TotalTax", Totalsum);
+						session.setAttribute("due", due);
+						session.setAttribute("TotalTax", Totalsum);
 						
 						 
 						 approved=true;
@@ -206,7 +218,7 @@ Totalsum = z;
 						due=change/100;
 						
 						System.out.println(due);
-						 request.setAttribute("due", due);
+						 session.setAttribute("due", due);
 						 request.getSession().setAttribute("TotalTax", Totalsum);
 						 
 						 approved=true;
@@ -214,7 +226,7 @@ Totalsum = z;
 					if(Amount<Totalsum){
 						due = Totalsum-Amount;
 						Totalsum = due;
-						 request.setAttribute("Due", due);
+						 session.setAttribute("Due", due);
 						 request.getRequestDispatcher("/PayPage.jsp").forward(request, response);
 					}
 			}
@@ -222,8 +234,8 @@ Totalsum = z;
 		
 		
 		if(Tender){
-			request.setAttribute("Tender", "Tender");
-			request.setAttribute("TotalTax", Totalsum);
+			session.setAttribute("Tender", "Tender");
+			session.setAttribute("TotalTax", Totalsum);
 			request.getRequestDispatcher("/PayPage.jsp").forward(request, response);
 		}
 			try{
@@ -239,16 +251,15 @@ Totalsum = z;
 					
 					try{
 						 if(request.getParameter("iCode") == "" && request.getParameter("iCode") == null && iCode==null ){
-							request.setAttribute("BarCodeEmpty","BarCodeEmpty");
+							session.setAttribute("BarCodeEmpty","BarCodeEmpty");
 							request.getRequestDispatcher("/Reg.jsp").forward(request, response);
 						}
 					else //if(request.getParameter("iCode") != null &&request.getParameter("iCode")!="" )
 					{
 							  
 						
-							   
 							  iQty = Double.parseDouble(Q);
-							  System.out.println(iCode+" Value from Search to Reg"+Q+" "+iQty);
+							 // System.out.println(iCode+" Value from Search to Reg"+Q+" "+iQty);
 							  String Check = ("SELECT COUNT(ItemCode) FROM Item WHERE ItemCode =?");
 							  
 							  PreparedStatement ps = MyConn.prepareStatement(Check);
@@ -258,8 +269,8 @@ Totalsum = z;
 								 
 								while(results.next()){
 							        	if(results.getInt(1)<=0){
-							        		System.out.println("Item Dose not Exist with BarCode "+iCode);
-							        		request.setAttribute("NotExist","NotExist");
+							        		//System.out.println("Item Dose not Exist with BarCode "+iCode);
+							        		session.setAttribute("NotExist","NotExist");
 							        		request.getRequestDispatcher("/Reg.jsp").forward(request, response);
 							        	// AddItem = false;
 							        	}	  
@@ -322,15 +333,16 @@ Totalsum = z;
 								
 								
 								
-								  request.getSession().setAttribute("item", item);
-						          request.getSession().setAttribute("itemList", itemList);
-						          request.getSession().setAttribute("Totalsum", Totalsum);
+								
+								  session.setAttribute("item", item);
+								  session.setAttribute("itemList", itemList);
+								  session.setAttribute("Totalsum", Totalsum);
 						          request.getRequestDispatcher("/Reg.jsp").forward(request, response);
 						          
-						         
+						         /*
 						          results.close();
 						            
-						          MyConn.close();
+						          MyConn.close();*/
 						          
 							 }	
 							
@@ -341,7 +353,7 @@ Totalsum = z;
 					catch (NullPointerException e) {
 			            System.out.print("Caught the NullPointerException"+e);
 
-							request.setAttribute("EnterItem", "EnterItem");
+							session.setAttribute("EnterItem", "EnterItem");
 							 request.getRequestDispatcher("/Reg.jsp").forward(request, response);
 					}
 					
@@ -392,6 +404,7 @@ Totalsum = z;
 					insertActor.setDouble(4, TotalsumTax);
 					insertActor.setTimestamp(5, timestamp);
 					insertActor.setString(6,"Open");
+					
 					System.out.println(PaymentType+" Payment Type");
 					result =insertActor.executeUpdate();
 					
@@ -402,7 +415,7 @@ Totalsum = z;
 						
 					}
 					
-					//System.out.println("Invoice created total from item.getTotalclass"+item.getTotal()+" from item.getTotalTax "+item.getTotalTax());
+					System.out.println("Invoice created total from item.getTotalclass"+item.getTotal()+" from item.getTotalTax "+item.getTotalTax());
 					
 					try{
 						
@@ -415,7 +428,7 @@ Totalsum = z;
 							
 							item.setItemTotalTax(addItem.iCode,addItem.iPrice, addItem.iQty);//.for total with tax & qty per item
 							item.setTax(addItem.iCode,addItem.iPrice, addItem.iQty);//. for total tax per item
-							insertActor = MyConn.prepareStatement("INSERT INTO InvoiceDetail(InvoiceNumber, ItemCode, ItemName,ItemPrice,Quantity,Tax,ItemTotal,Date) VALUES (?,?,?,?,?,?,?,?)");
+							insertActor = MyConn.prepareStatement("INSERT INTO InvoiceDetail(InvoiceNumber, ItemCode, ItemName,ItemPrice,Quantity,Tax,ItemTotal,Date,Status) VALUES (?,?,?,?,?,?,?,?,?)");
 							
 							insertActor.setInt(1, InvoiceNumber);
 							insertActor.setString(2, code);
@@ -425,7 +438,7 @@ Totalsum = z;
 							insertActor.setDouble(6, item.getTax());
 							insertActor.setDouble(7, item.getItemTotalTax());
 							insertActor.setTimestamp(8, timestamp);
-							
+							insertActor.setString(9, "Open");
 							
 							System.out.println("Item add to InvoideDetail with Inv# "+InvoiceNumber+" Item"+name+" Qty"+addItem.iQty+" TTl"+item.getItemTotalTax()+" tax"+item.getTax());
 							result =insertActor.executeUpdate();
@@ -454,7 +467,7 @@ Totalsum = z;
 							 	String realPath = getServletContext().getRealPath("/");
 							 	
 								System.out.println(realPath+" k.sdugf");
-								String localPath="/Users/kishanpatel/Desktop/Csc 400/InsertDataWebApplication/";
+								/*String localPath="/Users/kishanpatel/Desktop/Csc 400/InsertDataWebApplication/";
 								
 							 	Map<String, Object> map = new HashMap<String,Object>();
 								//map.put("maxInvNum", maxInvNum);
@@ -469,7 +482,7 @@ Totalsum = z;
 								
 								//JasperExportManager.exportReportToPdfFile(jasperPrint, "/Users/kishanpatel/Desktop/Csc 400/InsertDataWebApplication/Reports/Invoice_1.pdf");
 								JasperExportManager.exportReportToPdfFile(jasperPrint, localPath+"/WebContent/Invoice_"+maxInvNum+".pdf");
-								
+								*/
 								//To Open file after its created
 								//Desktop.getDesktop().open(new File(realPath+"WebContent/Invoice_"+maxInvNum+".pdf"));
 								System.out.println("Done! Creating Reciept");
@@ -493,6 +506,10 @@ Totalsum = z;
 				}
 				 
 			}
+			catch(SQLException e){
+				e.printStackTrace();
+			}
+			
 			catch (InstantiationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -503,16 +520,15 @@ Totalsum = z;
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		
-			catch (SQLException exc){
-				  
-			} catch (Exception e1) {
+		 catch (Exception e1) {
 				// TODO Auto-generated catch block
+			 
 				e1.printStackTrace();
 			} finally  {
 				ConnectionManager.closeConnection(MyConn);
 			}
 			
+		 
 	}
 	 static double Totalsum = 0;
 	

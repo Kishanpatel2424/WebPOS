@@ -12,6 +12,21 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   
 </head>
+<%
+String userName = null;
+//allow access only if session exists
+if(session.getAttribute("user") == null){
+	response.sendRedirect("/InsertDataWebApplication/index.jsp");
+}else userName = (String) session.getAttribute("user");
+String sessionID = null;
+Cookie[] cookies = request.getCookies();
+if(cookies !=null){
+for(Cookie cookie : cookies){
+	if(cookie.getName().equals("user")) 
+		userName = cookie.getValue();
+}
+}
+%>
 <body>
 <H1>Search an Item</H1>
 <form id="MyForm" name="MyForm" action="" method="POST" >
@@ -35,7 +50,7 @@
 <%@ page import="com.mysql.*" %>
 <%@ page import="java.sql.*" %>
 
-<html>
+
 <body>
 <div id="content">
 
@@ -60,8 +75,8 @@
             <%
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection conn = null;
-                conn = DriverManager.getConnection("jdbc:mysql://localhost:8889/test", "root", "root");
-                //conn = DriverManager.getConnection("jdbc:mysql://node23113-env-9184706.njs.jelastic.vps-host.net/test","root","J3rV6IO75S");
+                //conn = DriverManager.getConnection("jdbc:mysql://localhost:8889/test", "root", "root");
+                conn = DriverManager.getConnection("jdbc:mysql://node23485-onlinepos.njs.jelastic.vps-host.net /test","root","BPNivr47456");
                 Statement stmt = null;
                 stmt = conn.createStatement();
                 String SearchList =request.getParameter("SearchList");
@@ -71,21 +86,22 @@
                 int num =0;
                 while(rs.next()){
                 	num++;
+                
             %>
             <tr>
                 <%
                     String code = rs.getString("ItemCode");
                     String name = rs.getString("ItemName");
-                    String company = rs.getString("Department");
-                    double salary = rs.getDouble("ItemPrice");
+                    String getDouble = rs.getString("Department");
+                    double ItemPrice = rs.getDouble("ItemPrice");
                     
                 %><form id="MyForm" name="MyForm" action="/InsertDataWebApplication/Cashier" method="POST" >
                 <td><%=num %></td>
                 <td><input type="submit" value =<%=code %> name="ItemCode"> &nbsp;</td>
                 <td><%=code %></td>
                 <td><%=name %></td>
-                <td><%=company %></td>
-                <td><%=salary %></td>
+                <td><%=getDouble %></td>
+                <td><%=ItemPrice %></td>
                 
                 </form>
             </tr>               

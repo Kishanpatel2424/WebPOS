@@ -32,8 +32,19 @@
 
 </style>
 <body onload="document.MyForm.iCode.focus();">
-
 <%
+String userName = null;
+//allow access only if session exists
+if(session.getAttribute("user") == null){
+	response.sendRedirect("/InsertDataWebApplication/index.jsp");
+}else userName = (String) session.getAttribute("user");
+String sessionID = null;
+
+
+
+%>
+<%
+
 	String succ = (String)request.getAttribute("Paid");
 String NotExist = (String)request.getAttribute("NotExist");
 	String Empty = (String)request.getAttribute("BarCodeEmpty");
@@ -59,7 +70,7 @@ String NotExist = (String)request.getAttribute("NotExist");
 		</script><%
 		}
 	%>
-	
+
 <div class="container-center">
 	<form id="MyForm" name="MyForm" action="/InsertDataWebApplication/Cashier" method="POST" >
 	<div class="table-responsive" class="ex1">
@@ -70,7 +81,7 @@ String NotExist = (String)request.getAttribute("NotExist");
 			</th>
 			<th style="width:25%;">
 				Scan Bar Code:-<input type="submit" value="Enter" name="Search" style=" visibility: hidden; height:1px"/>
-				<input type="text" id="iCode" name=iCode value="" size="10" placeholder="Scan BarCode"  class="form-control"/>	
+				<input type="text" id="iCode" name=iCode value="" size="10" placeholder="Scan BarCode" class="form-control"/>	
 			</th>
 			
 			<th style="width:10%;">	
@@ -119,19 +130,22 @@ String NotExist = (String)request.getAttribute("NotExist");
 				<tr>
 				<div class="scrollit" >
 						<table class="table" id="item">
+							
 							<c:choose>
 							 	 <c:when test="${empty itemList}">
 						         <c:set var="TotalNonTax" value="${0}" /> 
-						         
+  
 					         
 					        </c:when>
+					        
 						        <c:otherwise>
-								    <c:forEach var="item" items="${itemList}">
+								     <c:forEach var="item" items="${itemList}">
 								        <c:set var="Number" value="${Number+1}"></c:set>
-								        <%-- <c:set var="ItemName" value="${item.getiName()}"/> --%>
+								        <%-- Not Needed 
+								        <c:set var="ItemName" value="${item.getiName()}"/> --%>
 								        <%-- <c:set var="Quantity" value="${item.getiQty()}"/> --%>
 								        <%-- <c:set var="ItemPrice" value="${item.getiQty()*item.getiPrice()}"/> --%>
-								        <%-- <c:set var="TotalNonTax" value="${TotalNonTax+ItemPrice}"/>  --%>
+								        <%-- <c:set var="TotalNonTax" value="${TotalNonTax+ItemPrice}"/> Not Needed --%>
 								        
 								         
 								        <tr> 
@@ -144,8 +158,9 @@ String NotExist = (String)request.getAttribute("NotExist");
 											<td style="width:10%"><fmt:formatNumber type = "currency" pattern = "####.##" value = "${item.getItemTotalTax()}" /></td>					            
 								        
 								        </tr>
-						            </c:forEach>
+						            </c:forEach> 
 						        </c:otherwise>
+						        
 							</c:choose>
 						</table>
 					</div>
@@ -154,11 +169,11 @@ String NotExist = (String)request.getAttribute("NotExist");
 	<table class="table" id="item" >
 		<tr>
 			<th style="width:15%;">
-				<input type="submit" Value="Non Tax" name="nonTaxItem" class="form-control">
+				<input type="submit" Value="Non Tax" name="nonTaxItem" id="nonTaxItem" class="form-control">
 				<input type="number" step="0.01" id="nonTaxItem" name="nonTaxItemValue" value="" placeholder="Price $" class="form-control"/>
 			</th>
 			<th style="width:15%;">
-				<input type="submit" Value="Tax Item"name="taxItem" class="form-control">
+				<input type="submit" Value="Tax Item"name="taxItem"  class="form-control">
 				<input type="number" step="0.01" id="taxItem" name="taxItemValue" value="" placeholder="Price $" class="form-control"/>
 			</th>
 			
@@ -169,9 +184,13 @@ String NotExist = (String)request.getAttribute("NotExist");
       				<span class="glyphicon glyphicon-search"></span><a href="/InsertDataWebApplication/SearchList.jsp"> Search
    				 </button>
 			</th>
-			<th style="width:15%;">
+			<th style="width:10%;">
 				Sale Reciepts:-
 				
+			</th>
+			<th style="width:10%;">
+				<input type="submit" Value="Discount %"name="Discount" class="form-control">
+				<input type="number" id="Discount" name="Discount" value="" placeholder="Discount %" class="form-control"/>
 			</th>
 			<th style="width:10%;">
 				Refund:-
@@ -180,7 +199,7 @@ String NotExist = (String)request.getAttribute("NotExist");
 			
 			<th style="width:10%;">
 				Bottle Refund:-
-				<input type="text" id="Quantity" name="DeleteIndex" value="" placeholder="Price $" class="form-control"/>
+				<input type="text" id="Quantity" name="DeleteIndex" value="" placeholder="Qty" class="form-control"/>
 			</th>
 			
 		</tr>
@@ -189,5 +208,6 @@ String NotExist = (String)request.getAttribute("NotExist");
 	</form>
 	
 </div>
+
 </body>
 </html>
