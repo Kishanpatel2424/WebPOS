@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -35,9 +36,20 @@ public class LoginServlet extends HttpServlet {
 		// get request parameters for userID and password
 		String user = request.getParameter("Username");
 		String pwd = request.getParameter("Password");
-		String clear =null;
-
-	
+		
+		@SuppressWarnings("unchecked")
+		ArrayList<ItemsDescription> itemList = new ArrayList<ItemsDescription>();
+		 //Clears data when LoginServlet.java is called
+		/*if(session.getAttribute("item")!=null){
+			 System.out.println(itemList.size()+" before forwarding");
+			 itemList = (ArrayList)request.getSession().getAttribute("itemList");
+			 itemList.clear();
+			 request.getSession().setAttribute("itemList",itemList);
+			 System.out.println(itemList.size()+" after forwarding");
+		 }*/
+		
+		 
+		 
 		try {
 			 MyConn = ConnectionManager.getConnection();
 			 //myStmt = MyConn.createStatement();
@@ -69,7 +81,9 @@ public class LoginServlet extends HttpServlet {
 		}else{
 			request.getRequestDispatcher("/index.jsp").forward(request, response);
 			System.out.println("Failed");
-		}
+		}	
+			 
+			 
 
 	}
 		catch (Exception e) {
@@ -77,5 +91,7 @@ public class LoginServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 
+	
+			
 }//doPost
 }

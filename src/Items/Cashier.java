@@ -109,27 +109,7 @@ public class Cashier extends HttpServlet {
 		iCode = request.getParameter("iCode");
 		Q = request.getParameter(("Quantity"));
 		
-		Cookie[] cookies = request.getCookies();
-
-		if(cookies !=null){
-			for(Cookie cookie : cookies){
-				System.out.println(cookie.getValue());
-				if(cookie.getName().equals("OldSessionId")) {
-					id = cookie.getValue();
-					
-					if(id != session.getId()){
-						System.out.println(id+" id &&& session.id "+session.getId());
-						id =(session.getId());
-					cookie.setValue(id);
-					}
-					System.out.println(cookie.getValue());
-				}
-			}
-		}
 		
-		if(id == session.getId()){
-			System.out.println(id+"lets do this");
-		}
 		//this is from SearchList.jsp Page
 			if(request.getParameter("ItemCode") != null){
 			iCode = request.getParameter("ItemCode").toUpperCase();
@@ -334,8 +314,8 @@ Totalsum = z;
 								
 								
 								
-								  session.setAttribute("item", item);
-								  session.setAttribute("itemList", itemList);
+								  request.getSession().setAttribute("item", item);
+								  request.getSession().setAttribute("itemList", itemList);
 								  session.setAttribute("Totalsum", Totalsum);
 						          request.getRequestDispatcher("/Reg.jsp").forward(request, response);
 						          

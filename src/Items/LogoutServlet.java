@@ -18,7 +18,7 @@ public class LogoutServlet extends HttpServlet {
        
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	response.setContentType("text/html");
-    	String OldSessionId =null;
+    	String OldSessionId ="dummyidsetupwillbehdsfdhsreplacedbycurrentis";
     	
     	Cookie[] cookies = request.getCookies();
     	if(cookies != null){
