@@ -55,6 +55,14 @@ public class CashierR extends HttpServlet {
 		// TODO Auto-generated method stub
 		
 		String action = (String) request.getParameter("action");
+		String ItemCode= (String) request.getParameter("ItemCode");
+		System.out.println(ItemCode);
+		if(ItemCode != null && !ItemCode.equals("")){
+			iCode = ItemCode;
+			iQty = 1;
+			addToCart(request, response);
+			response.sendRedirect("/InsertDataWebApplication/Cashier.jsp");
+		}
 		
 		if(action!=null && !action.equals("")){
 					
@@ -62,6 +70,9 @@ public class CashierR extends HttpServlet {
 				iCode = request.getParameter("iCode");
 				iQty = Integer.parseInt((request.getParameter("Quantity")));
 				addToCart(request, response);
+			}
+			if(action.equals("Clear")){
+				clearCart(request,response);
 			}
 			if(action.equals("Non Tax")){
 				System.out.println("NonTax");
@@ -81,9 +92,18 @@ public class CashierR extends HttpServlet {
 				remove(request,response);
 			}
 			
+			response.sendRedirect("/InsertDataWebApplication/Cashier.jsp");	
 		}
-		response.sendRedirect("/InsertDataWebApplication/Cashier.jsp");
 		
+		
+	}
+	
+	protected void clearCart(HttpServletRequest request, HttpServletResponse response) {
+		HttpSession session = request.getSession();
+		objCartBean = session.getAttribute("cart");
+		ItemBean = (ItemBean) objCartBean ;
+		
+		ItemBean.clearCartItem();
 	}
 	
 	protected void remove(HttpServletRequest request, HttpServletResponse response) {
@@ -136,7 +156,7 @@ public class CashierR extends HttpServlet {
 					while(results.next()){
 				        	if(results.getInt(1)<=0){
 				        		itemFound = false;
-				        		session.setAttribute("NotExist", "NotExist");
+				        		request.setAttribute("NotExist", "NotExist");
 				        		
 				        	}
 				        	else
@@ -171,6 +191,7 @@ public class CashierR extends HttpServlet {
 									 
 									  if(objCartBean!=null) {
 										  ItemBean = (ItemBean) objCartBean ;
+										  
 										  session.setAttribute("cart", ItemBean);
 									  } else {
 										  ItemBean = new ItemBean();
@@ -178,7 +199,10 @@ public class CashierR extends HttpServlet {
 									   session.setAttribute("cart", ItemBean);
 									   
 									  }
+									  
 									  ItemBean.addCartItem(iCode, iName, iPrice, iQty);
+									  
+									  
 			/*ItemBean cartItem= (ItemBean) session.getAttribute("cart");
 					System.out.println(cartItem.getTotalItemCount()+" size");*/
 									  for(ItemsDescription b : ItemBean.getCartItems()){

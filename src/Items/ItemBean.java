@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class ItemBean {
 	private ArrayList<ItemsDescription> itemList = new ArrayList<ItemsDescription>();
-	private double orderTotal =0;
-	
+	public double orderTotal =0.0;
+	private double itemTotalRemove =0.0;
 	public int getTotalItemCount(){
 		return itemList.size();
 	}
@@ -41,23 +41,33 @@ public class ItemBean {
 			    Total(cartItem.getItemTotalTax());
 			    addCartItem(cartItem);
 			   }
-			    
+			    orderTotal += cartItem.getItemTotalTax();
+			    //System.out.println(orderTotal+" from addtocart");
 			  } catch (NumberFormatException nfe) {
 			   System.out.println("Error while parsing from String to primitive types: "+nfe.getMessage());
 			   nfe.printStackTrace();
 			  }
 	}
-	public void remove(int a){
-		
-			this.itemList.remove(a-1);
-		
-	}
-	public void clearCartItem(){
-		this.itemList.clear();
-	}
+	
 	public void addCartItem(ItemsDescription cartItem) {
 		itemList.add(cartItem);
-		 }
+	}
+	
+	
+	public void remove(int a){
+		itemTotalRemove=itemList.get(a-1).getItemTotalTax();
+		System.out.println(itemTotalRemove);
+		this.itemList.remove(a-1);
+		getOrderTotal();
+	}
+	
+	public void clearCartItem(){
+		this.itemList.clear();
+		this.orderTotal =0;
+	}
+	
+	
+	
 	public ItemsDescription getCartItem(int iItemIndex) {
 		ItemsDescription cartItem = null;
 		  if(itemList.size()>iItemIndex) {
@@ -72,8 +82,20 @@ public class ItemBean {
 	 public void setCartItems(ArrayList<ItemsDescription> alCartItems) {
 		  this.itemList = alCartItems;
 		 }
-
-	 
+	 public double getOrderTotal() {
+		 
+		 System.out.println(itemList.size()+" size is "+itemTotalRemove);
+		 for(int i=0;i<this.itemList.size();i++){
+			 orderTotal += itemList.get(i).getTotalTax(); 
+			 
+		 }
+		 if(itemTotalRemove !=0)
+			 orderTotal = orderTotal-itemTotalRemove;
+		 itemTotalRemove=0;
+		 //System.out.println(orderTotal+" from Bean removed value"+itemTotalRemove);
+		 return this.orderTotal;
+		 }
+		 
 	static double Totalsum = 0;
 	public static double Total (double iPrice){
 		

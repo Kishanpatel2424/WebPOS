@@ -12,7 +12,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   
 </head>
-<%
+<%-- <%
 String userName = null;
 //allow access only if session exists
 if(session.getAttribute("user") == null){
@@ -26,7 +26,7 @@ for(Cookie cookie : cookies){
 		userName = cookie.getValue();
 }
 }
-%>
+%> --%>
 <body>
 <H1>Search an Item</H1>
 <form id="MyForm" name="MyForm" action="" method="POST" >
@@ -75,8 +75,8 @@ for(Cookie cookie : cookies){
             <%
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection conn = null;
-                //conn = DriverManager.getConnection("jdbc:mysql://localhost:8889/test", "root", "root");
-                conn = DriverManager.getConnection("jdbc:mysql://node23485-onlinepos.njs.jelastic.vps-host.net /test","root","BPNivr47456");
+                conn = DriverManager.getConnection("jdbc:mysql://localhost:8889/test", "root", "root");
+                //conn = DriverManager.getConnection("jdbc:mysql://node23485-onlinepos.njs.jelastic.vps-host.net /test","root","BPNivr47456");
                 Statement stmt = null;
                 stmt = conn.createStatement();
                 String SearchList =request.getParameter("SearchList");
@@ -95,7 +95,7 @@ for(Cookie cookie : cookies){
                     String getDouble = rs.getString("Department");
                     double ItemPrice = rs.getDouble("ItemPrice");
                     
-                %><form id="MyForm" name="MyForm" action="/InsertDataWebApplication/Cashier" method="POST" >
+                %><form id="MyForm" name="MyForm" action="/InsertDataWebApplication/CashierR" method="POST" >
                 <td><%=num %></td>
                 <td><input type="submit" value =<%=code %> name="ItemCode"> &nbsp;</td>
                 <td><%=code %></td>

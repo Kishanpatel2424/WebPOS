@@ -34,9 +34,29 @@
 
 </style>
 <body onload="document.MyForm.iCode.focus();">
-
 <%
+String userName = null;
+//allow access only if session exists
+if(session.getAttribute("user") == null){
+	response.sendRedirect("/InsertDataWebApplication/index.jsp");
+}else userName = (String) session.getAttribute("user");
+String sessionID = null;
 
+
+String totalR = request.getParameter("total");
+ItemBean ItemBean =null;
+double total=0;
+
+Object objCartBean = session.getAttribute("cart");
+if(objCartBean !=null){
+	 ItemBean = (ItemBean) objCartBean ;
+	 total = ItemBean.orderTotal;
+	
+}
+
+%>
+<%
+ 
 String succ = (String)request.getAttribute("Paid");
 String NotExist = (String)request.getAttribute("NotExist");
 	String Empty = (String)request.getAttribute("BarCodeEmpty");
@@ -88,8 +108,9 @@ String NotExist = (String)request.getAttribute("NotExist");
 			<th style="width:10%;">
 			
 				Total $  
-				<fmt:formatNumber type="number" maxFractionDigits="2" value="${Totalsum}" />
-				<input type="submit" Value="PAY" name="Tender" class="form-control">
+				<fmt:formatNumber type="number" maxFractionDigits="2" value="<%=total%>" />
+				<br>
+				<a href="/InsertDataWebApplication/PayPage.jsp"><input type="button" Value="Pay" name="Pay" class="form-control"></a>
 			</th>
 			
 			<th style="width:10%;">
@@ -125,11 +146,8 @@ String NotExist = (String)request.getAttribute("NotExist");
 							
 						        <%
 						        int number =0;
-						        	ItemBean ItemBean =null;
-						        	Object objCartBean = session.getAttribute("cart");
-						        	
-						        	 if(objCartBean !=null){
-						        		 ItemBean = (ItemBean) objCartBean ;
+						        	if(objCartBean !=null){
+						       	 		ItemBean = (ItemBean) objCartBean ;	 
 						        	for(ItemsDescription b : ItemBean.getCartItems()){
 										number++;
 										//System.out.println(b.getiCode()+" Price "+b.getiName()+" Name "+b.getiPrice()+" Price");
@@ -179,9 +197,10 @@ String NotExist = (String)request.getAttribute("NotExist");
 			<th style="width:15%;">
 				<!-- <button class="form-control"><a href="/InsertDataWebApplication/SearchList.jsp">Search Item</a></button> -->
 				Search Item:-<br>
-				<button type="button" class=" form-control">
-      				<span class="glyphicon glyphicon-search"></span><a href="/InsertDataWebApplication/SearchList.jsp"> Search
-   				 </button>
+				
+      				<a href="/InsertDataWebApplication/SearchList.jsp"><input type="button" Value="Search Item" name="SearchItem" class="form-control">
+      				</a>
+   				 
 			</th>
 			<th style="width:10%;">
 				Sale Reciepts:-
