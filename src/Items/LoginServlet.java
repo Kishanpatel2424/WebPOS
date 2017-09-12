@@ -25,7 +25,8 @@ public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private final String userID = "admin";
 	private final String password = "password";
-
+	public String User_Type =null;
+	public int User_Id =0;
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		Connection MyConn =null;
@@ -39,14 +40,6 @@ public class LoginServlet extends HttpServlet {
 		
 		@SuppressWarnings("unchecked")
 		ArrayList<ItemsDescription> itemList = new ArrayList<ItemsDescription>();
-		 //Clears data when LoginServlet.java is called
-		/*if(session.getAttribute("item")!=null){
-			 System.out.println(itemList.size()+" before forwarding");
-			 itemList = (ArrayList)request.getSession().getAttribute("itemList");
-			 itemList.clear();
-			 request.getSession().setAttribute("itemList",itemList);
-			 System.out.println(itemList.size()+" after forwarding");
-		 }*/
 		
 		 
 		 
@@ -62,10 +55,10 @@ public class LoginServlet extends HttpServlet {
 			 results = ps.executeQuery();
 			 
 			 if(results.next()){
-				 String User_Type = results.getString("User_Type");
-			
+				 User_Type = results.getString("User_Type");
+				 User_Id = results.getInt("user_Id");
 			session.setAttribute("user", User_Type);
-			
+			session.setAttribute("user_id", User_Id);
 			//setting session to expiry in 30 mins
 			session.setMaxInactiveInterval(30*60);
 			Cookie userName = new Cookie("user", user);

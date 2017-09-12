@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@ page import="Items.*" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -57,21 +59,37 @@ function simplifyResponseHandler(data) {
 	});
 </script>
 <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+
 </head>
 <body>
+<%
+ItemBean ItemBean =null;
+double total=0;
+
+Object objCartBean = session.getAttribute("cart");
+if(objCartBean !=null){
+	 ItemBean = (ItemBean) objCartBean ;
+	 total = ItemBean.orderTotal;	
+}
+%>
+
+
 <div data-role="page">
   <div data-role="header">
     <h1>Checkout </h1>
+    Amount Due:- <fmt:formatNumber type="number" maxFractionDigits="2" value="<%=total%>" />
   </div>
 
   <div data-role="main" class="ui-content">
     <a href="#myPopup" data-rel="popup" class="ui-btn ui-btn-inline ui-corner-all ">Cash</a>
     <div data-role="popup" id="myPopup" class="ui-content" style="min-width:250px;">
-      <form method="post" action="/InsertDataWebApplication/Cashier">
+      <form method="post" action="/InsertDataWebApplication/CashierR">
         <div>
-          <h3>Amount Due:-$ &nbsp <fmt:formatNumber type="number" maxFractionDigits="2" value="${TotalTax}" /></h3>
+          <h3>Amount Due:-$ &nbsp <fmt:formatNumber type="number" maxFractionDigits="2" value="<%=total%>" /></h3>
           <label for="usrnm" class="ui-hidden-accessible">Username:</label>
-          <input type="number" name="Amount" step="0.01" id="Amount" value="${TotalTax}">
+          
+          <input type="number" name="Cash" onchange="setTwoNumberDecimal"  step="0.01" id="Amount" value="<%=total%>">
           <input type="number" value="1"name="Type" style="visibility:hidden"/>
          
           <input type="submit" value="Process" name="Process">
@@ -80,11 +98,11 @@ function simplifyResponseHandler(data) {
     </div>
     <a href ="#myPopup1" data-rel="popup" class="ui-btn ui-btn-inline ui-corner-all ">Credit Card</a>
     <div data-role="popup" id="myPopup1" class="ui-content" style="min-width:250px;">
-      <form method="post" action="/InsertDataWebApplication/Cashier">
+      <form method="post" action="/InsertDataWebApplication/CashierR">
         <div>
-          <h3>Amount Due:-$ <fmt:formatNumber type="number" maxFractionDigits="2" value="${TotalTax}" /></h3>
+          <h3>Amount Due:-$ <fmt:formatNumber type="number" maxFractionDigits="2" value="<%=total%>" /></h3>
           <label for="usrnm" class="ui-hidden-accessible">Username:</label>
-          <input type="number" name="Amount" step="0.01" id="Amount" value="${TotalTax}">
+          <input type="number" name="Card"onchange="setTwoNumberDecimal(this)"  step="0.01" id="Amount" value="<%=total%>">
           <input type="number" value="2"name="Type" style="visibility:hidden"/>
          
           <input type="submit" value="Process" name="Process">

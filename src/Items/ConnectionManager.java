@@ -12,18 +12,18 @@ public class ConnectionManager {
 
 		
         
-	        String url = "jdbc:mysql://localhost:8889/test";
+	        /*String url = "jdbc:mysql://localhost:8889/test";
 	        String dbName = "test";
 	        String driver = "com.mysql.jdbc.Driver";
 	        String userName = "root";
-	        String password = "root";
+	        String password = "root";*/
 	        
-		/*// Jalastic
+		// Jalastic
 	        String url = "jdbc:mysql://node23485-onlinepos.njs.jelastic.vps-host.net/test";
 	        String dbName = "test";
 	        String driver = "com.mysql.jdbc.Driver";
 	        String userName = "root";
-	        String password = "BPNivr47456";*/
+	        String password = "BPNivr47456";
 	        
 /*
 		//kdpatel2424@outlook.com--

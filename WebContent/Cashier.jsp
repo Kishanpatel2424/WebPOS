@@ -43,14 +43,16 @@ if(session.getAttribute("user") == null){
 String sessionID = null;
 
 
-String totalR = request.getParameter("total");
+
 ItemBean ItemBean =null;
 double total=0;
+double change_Due=0;
 
 Object objCartBean = session.getAttribute("cart");
 if(objCartBean !=null){
 	 ItemBean = (ItemBean) objCartBean ;
 	 total = ItemBean.orderTotal;
+	 change_Due=ItemBean.change_Due;
 	
 }
 
@@ -115,7 +117,7 @@ String NotExist = (String)request.getAttribute("NotExist");
 			
 			<th style="width:10%;">
 				Change Due $ <br>
-				 ${due} 
+				 <%=change_Due %>
 				 
 			</th>
 			<th style="width:10%;">

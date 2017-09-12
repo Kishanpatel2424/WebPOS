@@ -10,8 +10,25 @@ public class ItemsDescription {
 	public double ItemTotal;
 	public double total; 
 	public double totalTax;
+	public String payment_Type;
+	public double amount_Total;
+	public double change_Due;
 	
-
+	public void setpType(String pType){
+		payment_Type =pType;
+	}
+	public String getiPtype(){
+		return payment_Type;
+	}
+	public void setamtTotal(double amtTtl){
+		amount_Total = amtTtl;
+	}
+	public double getamtTotal(){
+		return amount_Total;
+	}
+	public void setDue(double amtDue){
+		change_Due = amtDue;
+	}
 	public void setiCode(String ItemCode){
 		iCode = ItemCode;
 	}
