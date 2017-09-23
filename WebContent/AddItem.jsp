@@ -1,11 +1,14 @@
 
  <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="com.mysql.*" %>
+<%@ page import="java.sql.*" %>
+<%@ include file = "home.jsp" %>
+<%@ page import="Items.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<%@ include file = "home.jsp" %>
 
 <title>Add Item</title>
 
@@ -111,31 +114,67 @@ for(Cookie cookie : cookies){
 					</div>
 				</div>
 				<div class="col-xs-12 col-sm-6 col-md-6">
-					<div class="form-group">Tax Rate
-                        <h7 class="form-control input-lg">6.35% </h7>
+					<div class="form-group">Min Quantity
+                        <input type="number" name="Min_Qty" value="0"  class="form-control input-lg" placeholder="Min Qty Allowed" tabindex="2">
 					</div>
 				</div>
 			</div>
+			
 			<div class="form-group">Item Name
 				<input type="text" name="iName" value="" class="form-control input-lg" placeholder="Product Name" tabindex="3">
 			</div>
 			
-			
-				<div class="form-group" > Choose Department
+			<div class="row">
+				<div class="col-xs-12 col-sm-6 col-md-6">
+					<div class="form-group"> Choose Vendor
+				 <%
+                Class.forName("com.mysql.jdbc.Driver");
+                Connection conn = null;
+                conn = DriverManager.getConnection("jdbc:mysql://localhost:8889/test", "root", "root");
+                //conn = DriverManager.getConnection("jdbc:mysql://node23485-onlinepos.njs.jelastic.vps-host.net /test","root","BPNivr47456");
+                Statement stmt = null;
+                stmt = conn.createStatement();
+                String SearchList =request.getParameter("SearchList");
+                String query = "SELECT Vendor_Name FROM Vendors";
+                ResultSet rs = null;
+                rs = stmt.executeQuery(query);
+                int num =0;
+                %>
+               
 				
-				<select name="Department" class="form-control input-lg" placeholder="Departement" tabindex="4">
-							<option value="None">None</option>
-							<option value="Wine">Wine</option>
-							<option value="Beer">Beer</option>
-							<option value="Liquor">Liquor</option>
-							<option value="Chanpagne">Champagne</option>
-							<option value="Rum">Rum</option>
-							<option value="Vodka">Vodka</option>
-							<option value="Gin">Gin</option>
-							<option value="Whiskey">Whiskey</option>
-							<option value="Cigarettes">Cigarettes</option>
-				</select>
+						<select name=Vendor_Name class="form-control input-lg" placeholder="Vendors" tabindex="4">
+							<%
+		                while(rs.next()){
+		                	num++;
+		                
+		            		%>
+									<option value="<%=rs.getString("Vendor_Name") %>"><%=rs.getString("Vendor_Name") %></option>
+						<%} 
+						query = "SELECT Department_Name FROM Departements";
+		                rs = null;
+		                rs = stmt.executeQuery(query);
+		                num =0;
+		                %>
+						</select>
+					</div>
+				</div>
+				
+				<div class="col-xs-12 col-sm-6 col-md-6">
+					<div class="form-group"> Choose Department
+					<select name="Department" class="form-control input-lg" placeholder="Departement" tabindex="4">
+						<%
+                while(rs.next()){
+                	num++;
+                
+            %>
+							<option value="<%=rs.getString("Department_Name") %>"><%=rs.getString("Department_Name") %></option>
+				<%} 
+					%>
+					</select>
+					</div>
+				</div>
 			</div>
+			
 			<div class="row">
 				<div class="col-xs-12 col-sm-4 col-md-4">
 					<div class="form-group">Item Cost
@@ -153,6 +192,8 @@ for(Cookie cookie : cookies){
 					</div>
 				</div>
 			</div>
+			
+			
 			<div class="row">
 				<div class="col-xs-12 col-sm-4 col-md-4">
 					<div class="form-group">Sell Price

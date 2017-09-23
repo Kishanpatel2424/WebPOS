@@ -3,20 +3,21 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-  <title>Reciept Example</title>
-  <%@ include file = "home.jsp" %>
+  <title>Reciept </title>
+  
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+
 </head>
 <%@ page import="com.mysql.*" %>
 <%@ page import="java.sql.*" %>
 
 <body>
+
 <div class="container-center">
 	
 	
@@ -30,7 +31,7 @@ String pt =null;
 
 <div style="margin:5% 40% 0% 33%;float:left; width:500px; box-shadow:0 0 3px #aaa; height:auto;color:#666;">
    <div style="width:100%; padding:10px; float:left; background:#1ca8dd; color:#fff; font-size:30px; text-align:center;">
-	Invoice ${maxInvNum}
+	
    </div>
     <div style="width:100%; padding:0px 0px;border-bottom:1px solid rgba(0,0,0,0.2);float:left;">
         <div style="width:30%; float:left;padding:10px;">
@@ -47,12 +48,12 @@ String pt =null;
 			</span>
         </div>
 		
-        <div style="width:40%; float:right;padding:">
+        <div style="width:40%; color:RED; float:right;padding:">
             <span style="font-size:14px;float:right;  padding:10px; text-align:right;">
-                <b>Date : </b>
+                <b>Date : <%=session.getAttribute("timestamp")%></b>
             </span>
 			<span style="font-size:14px;float:right;  padding:10px; text-align:right;">
-               <b>Invoice# : ${maxInvNum}</b>
+               <b>Invoice# :<%=session.getAttribute("maxInvNum")%></b>
             </span>
         </div>
     </div>
@@ -70,16 +71,17 @@ String pt =null;
 <%
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection conn = null;
-                //conn = DriverManager.getConnection("jdbc:mysql://localhost:8889/test", "root", "root");
-                conn = DriverManager.getConnection("jdbc:mysql://node23485-onlinepos.njs.jelastic.vps-host.net /test","root","BPNivr47456");
+                conn = DriverManager.getConnection("jdbc:mysql://localhost:8889/test", "root", "root");
+                //conn = DriverManager.getConnection("jdbc:mysql://node23485-onlinepos.njs.jelastic.vps-host.net/test","root","BPNivr47456");
                 Statement stmt = null;
                 stmt = conn.createStatement();
-                String maxInvNum = (String)request.getParameter("maxInvNum");
+                
                 String query = "SELECT *  FROM InvoiceDetail INNER JOIN Invoice  on InvoiceDetail.InvoiceNumber = Invoice.InvoiceNumber "+
                 		"WHERE InvoiceDetail.InvoiceNumber = (SELECT max(InvoiceNumber) FROM Invoice)";
                 ResultSet rs = null;
                 rs = stmt.executeQuery(query);
                 int num =0;
+                
                 while(rs.next()){
                 	num++;
                 
@@ -96,12 +98,14 @@ String pt =null;
                     pt = rs.getString("Invoice.PaymentType");
                     
                     tax+= rs.getDouble("Tax");
-                    total+= rs.getDouble("ItemTotal");
+                    total= rs.getDouble("Invoice.InvoiceTotal");
+                    
+                    
                 %>
                 <td><%=num %></td>
-                
                 <td><%=code %></td>
                 <td><%=name %></td>
+                
                 <td><%=Qty %></td>
                 <td><%=salary %></td>
         </tr>

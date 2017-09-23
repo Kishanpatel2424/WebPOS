@@ -14,7 +14,7 @@ if(session.getAttribute("user") == null){
 	response.sendRedirect("/InsertDataWebApplication/index.jsp");
 }else {
 	user = (String) session.getAttribute("user");
-	response.sendRedirect("/InsertDataWebApplication/Reg.jsp");
+	response.sendRedirect("/InsertDataWebApplication/Cashier.jsp");
 }
 String userName = null;
 String sessionID = null;

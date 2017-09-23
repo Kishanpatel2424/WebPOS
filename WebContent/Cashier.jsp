@@ -122,14 +122,15 @@ String NotExist = (String)request.getAttribute("NotExist");
 			</th>
 			<th style="width:10%;">
 				Print Reciept<br>
-				<a href ="/InsertDataWebApplication/Invoice_${maxInvNum}.pdf" target="_blank"><input type="button" Value="Reciept" name="Reciept" class="form-control"></a>
+				<a href ="/InsertDataWebApplication/LastReciept.jsp" target="_blank"><input type="button" Value="Reciept" name="Reciept" class="form-control"></a>
 				
 			</th>
 		</tr>
 		</table>
 	</div>
-		 <div class="table-responsive">
+		 
 		 	<table class="table" id="item" >
+		 	<div class="table-responsive">
 		 		<tr>
 						<th style="width:4%">#</th>
 						<th style="width:14%">Bar Code</th>
@@ -142,7 +143,7 @@ String NotExist = (String)request.getAttribute("NotExist");
 				</tr>
 			</table>
 		 </div>
-				<tr>
+				
 				<div class="scrollit" >
 						<table class="table" id="item">
 							
@@ -183,7 +184,7 @@ String NotExist = (String)request.getAttribute("NotExist");
 							
 						</table>
 					</div>
-				</tr>
+				
 		 	<div class="table-responsive" class="ex1">
 	<table class="table" id="item" >
 		<tr>
@@ -218,12 +219,12 @@ String NotExist = (String)request.getAttribute("NotExist");
 			</th>
 			
 			<th style="width:10%;">
-				Bottle Refund:-
+				Emptys:-
 				<input type="text" id="Quantity" name="DeleteIndex" value="" placeholder="Qty" class="form-control"/>
 			</th>
 			
 		</tr>
-		</table>
+	</table>
 	</div>
 	</form>
 	

@@ -58,9 +58,10 @@ public class Update extends HttpServlet {
 		String iName="";
 		double iCost=0.0;
 		double iPrice=0.0;
-		int QuantityOnHand=1; 
+		int QuantityOnHand=0; 
 		String Department ="";
-		
+		int Min_Qty =0;
+		String Vendor_Name=null;
 		
 		
 			if(submitButtonPressed){
@@ -109,7 +110,10 @@ public class Update extends HttpServlet {
 			        		iCost = rs.getDouble("ItemCost");
 			        		iPrice = rs.getDouble("ItemPrice");
 			        		Department = rs.getString("Department");
+			        		
 			        		QuantityOnHand = rs.getInt("QuantityOnHand");
+			        		Min_Qty = rs.getInt("Min_Qty");
+			        		Vendor_Name = rs.getString("Vendor_Name");
 			        		
 			        		System.out.println(iCode+" "+iName+" "+iCost+" "+iPrice);
 			        		request.setAttribute("iCode",iCode);
@@ -119,7 +123,8 @@ public class Update extends HttpServlet {
 			        		request.setAttribute("Department",Department);
 			        		request.setAttribute("QuantityOnHand",QuantityOnHand);
 			        		request.setAttribute("ItemCode", OldiCode);
-			        		
+			        		request.setAttribute("Min_Qty", Min_Qty);
+			        		request.setAttribute("Vendor_Name", Vendor_Name);
 			        		request.getRequestDispatcher("Update.jsp").forward(request, response);
 			        		
 			        	}
@@ -153,7 +158,7 @@ public class Update extends HttpServlet {
 				MyConn = ConnectionManager.getConnection();
 				 myStmt = MyConn.createStatement();
 				 
-				 UpdateActor = MyConn.prepareStatement("UPDATE Item set ItemCode=?, ItemName=?, ItemCost=?, ItemPrice=?, Department=?, QuantityOnHand=?, deposit=? where ItemCode="+iCode);
+				 UpdateActor = MyConn.prepareStatement("UPDATE Item set ItemCode=?, ItemName=?, ItemCost=?, ItemPrice=?, Department=?, QuantityOnHand=?, deposit=?, Vender_Name=?, Min_Qty=? where ItemCode=?");
 				 
 				 if(request.getParameter("iCode") != null){
 					 iCode =request.getParameter("iCode").trim();
@@ -182,8 +187,15 @@ public class Update extends HttpServlet {
 					
 					  iCost = Double.parseDouble(Price);
 				}
+				System.out.println(request.getParameter("Vendor_Name"));
+				if(!request.getParameter("Vendor_Name").equals(null) && !request.getParameter("Vendor_Name").equals("")){
+					Vendor_Name = request.getParameter("Vendor_Name");
+				}
+				if(!request.getParameter("Min_Qty").equals(null)){
+					Min_Qty = Integer.parseInt(request.getParameter("Min_Qty"));
+				}
 				
-				
+				UpdateActor.setString(10, iCode);
 				UpdateActor.setString(1, iCode);
         		UpdateActor.setString(2, iName);
         		UpdateActor.setDouble(3, iCost);
@@ -191,6 +203,8 @@ public class Update extends HttpServlet {
         		UpdateActor.setString(5, Department);
         		UpdateActor.setInt(6, QuantityOnHand);
         		UpdateActor.setDouble(7, 0);
+        		UpdateActor.setString(8, Vendor_Name);
+        		UpdateActor.setInt(9, Min_Qty);
         		System.out.println(iCode+" "+iName+" "+iCost+" "+iPrice+" "+Department+" "+QuantityOnHand);
         		
         		result = UpdateActor.executeUpdate();

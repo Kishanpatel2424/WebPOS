@@ -73,6 +73,8 @@ public class AddItems extends HttpServlet {
 		double iCost=0.0;
 		String Price;
 		double iPrice=0.0;
+		int Min_Qty =0;
+		String Vendor_Name=null;
 		
 		String Department="";
 		int OtyOnHand=1;
@@ -90,6 +92,9 @@ public class AddItems extends HttpServlet {
 				 iCode =request.getParameter("iCode").toUpperCase();
 				 iName = request.getParameter("iName");
 				 Department = request.getParameter("Department");
+				 Vendor_Name = request.getParameter("Vendor_Name");
+				 System.out.println(Vendor_Name);
+				 
 				 Price = (request.getParameter("iPrice"));
 				 	if(Price =="" || Price==null)
 				 		iPrice=0.0;
@@ -106,6 +111,12 @@ public class AddItems extends HttpServlet {
 					 	iCost=0.0;
 				 	else	
 				 		iCost = Double.parseDouble(Price);
+				 if(request.getParameter("Min_Qty").equals("") || request.getParameter("Min_Qty").equals(null))
+					 Min_Qty = 0;
+				 else
+					 Min_Qty = Integer.parseInt((request.getParameter("Min_Qty")));
+				 
+				 
 			}
 			
 			
@@ -136,17 +147,19 @@ public class AddItems extends HttpServlet {
 				}
 				if(AddItem == true){
 					System.out.println("Item Inserted");
-		         insertActor = MyConn.prepareStatement("INSERT INTO Item(ItemCode, ItemName,ItemCost,ItemPrice,Department,QuantityOnHand) VALUES(?,?,?,?,?,?)");
+		         insertActor = MyConn.prepareStatement("INSERT INTO Item(ItemCode, ItemName,ItemCost,ItemPrice,Department,QuantityOnHand,Min_Qty,Vendor_Name) VALUES(?,?,?,?,?,?,?,?)");
 		         insertActor.setString(1,iCode);
 		         insertActor.setString(2, iName);
 		         insertActor.setDouble(3, iCost);
 		         insertActor.setDouble(4, iPrice);
 		         insertActor.setString(5, Department);
 		         insertActor.setInt(6, OtyOnHand);
+		         insertActor.setInt(7, Min_Qty);
+		         insertActor.setString(8, Vendor_Name);
 		         
 		         result =insertActor.executeUpdate();
 		         //int rs = myStmt.executeUpdate(sql);
-		         pw.print("Completed");
+		         
 		          
 		          
 		          if(result>0){

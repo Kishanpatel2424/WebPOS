@@ -1,12 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="com.mysql.*" %>
+<%@ page import="java.sql.*" %>
+<%@ include file = "home.jsp" %>
+<%@ page import="Items.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Update Item</title>
 
-<%@ include file = "home.jsp" %>
+
+
 <br>
 </head>
 <%
@@ -84,23 +89,69 @@ for(Cookie cookie : cookies){
 			<div class="row">
 				<div class="col-xs-12 col-sm-6 col-md-6">
 					<div class="form-group">Scan BarCode
-                        <input type="text" name="iCode" value="${iCode}"  class="form-control input-lg" placeholder="Barcode" tabindex="1">
+                        <input type="text" name="iCode" value="${iCode}"  onkeypress="return tabE(this,event)" class="form-control input-lg" placeholder="Barcode" tabindex="1">
 					</div>
 				</div>
 				<div class="col-xs-12 col-sm-6 col-md-6">
-					<div class="form-group">Tax Rate
-                        <h7 class="form-control input-lg">6.35% </h7>
+					<div class="form-group">Min Quantity
+                        <input type="number" name="Min_Qty" value="${Min_Qty}"  class="form-control input-lg" placeholder="Min Qty Allowed" tabindex="2">
 					</div>
 				</div>
 			</div>
 			<div class="form-group">Item Name
 				<input type="text" name="iName" value="${iName}" class="form-control input-lg" placeholder="Product Name" tabindex="3">
 			</div>
-			
-			
-				<div class="form-group" >Department
+			<div class="row">
+				<div class="col-xs-12 col-sm-6 col-md-6">
+					<div class="form-group"> Choose Vender
+				 <%
+                Class.forName("com.mysql.jdbc.Driver");
+                Connection conn = null;
+                conn = DriverManager.getConnection("jdbc:mysql://localhost:8889/test", "root", "root");
+                //conn = DriverManager.getConnection("jdbc:mysql://node23485-onlinepos.njs.jelastic.vps-host.net /test","root","BPNivr47456");
+                Statement stmt = null;
+                stmt = conn.createStatement();
+                String SearchList =request.getParameter("SearchList");
+                String query = "SELECT Vendor_Name FROM Vendors";
+                ResultSet rs = null;
+                rs = stmt.executeQuery(query);
+                int num =0;
+                %>
+               
 				
-				<input name="Department" value="${Department}" class="form-control input-lg" placeholder="Department Name" tabindex="3">
+						<select name="Vendor_Name" class="form-control input-lg"  tabindex="4">
+						<option>${Vendor_Name}</option>
+						<%
+		                while(rs.next()){
+		                	num++;
+		                
+		            		%>
+									<option value="<%=rs.getString("Vendor_Name") %>"><%=rs.getString("Vendor_Name") %></option>
+						<%} 
+						query = "SELECT Department_Name FROM Departements";
+		                rs = null;
+		                rs = stmt.executeQuery(query);
+		                num =0;
+		                %>
+						</select>
+					</div>
+				</div>
+				
+				<div class="col-xs-12 col-sm-6 col-md-6">
+					<div class="form-group"> Choose Department
+					<select name="Department" class="form-control input-lg"  tabindex="4">
+					<option>${Department}</option>	
+						<%
+                		while(rs.next()){
+                		num++;
+                
+           		 		%>				
+							<option value="<%=rs.getString("Department_Name") %>"><%=rs.getString("Department_Name") %></option>
+				<%} 
+					%>
+					</select>
+					</div>
+				</div>
 			</div>
 			<div class="row">
 				<div class="col-xs-12 col-sm-4 col-md-4">

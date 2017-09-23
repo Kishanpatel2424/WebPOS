@@ -154,7 +154,7 @@ public class CashierR extends HttpServlet {
 				java.sql.Timestamp timestamp = new java.sql.Timestamp(cal.getTimeInMillis());
 				
 				//Statement
-				insertActor = MyConn.prepareStatement("INSERT INTO Invoice(InvoiceTotal,ChangeDue,PaymentType,Tax,Date,User_Id,Status) VALUES(?,?,?,?,?,?,?)");
+				insertActor = MyConn.prepareStatement("INSERT INTO Invoice(InvoiceTotal,ChangeDue,PaymentType,Tax,Date,user_Id,Status) VALUES(?,?,?,?,?,?,?)");
 				insertActor.setDouble(1,ItemBean.orderTotal);
 				insertActor.setDouble(2, ItemBean.change_Due);
 				insertActor.setString(3,payment_Type);
@@ -163,7 +163,7 @@ public class CashierR extends HttpServlet {
 				insertActor.setInt(6,(Integer)session.getAttribute("user_id"));
 				insertActor.setString(7,"Open");
 				
-				System.out.println(ItemBean.orderTotalTax+" Payment Type");
+				//System.out.println(ItemBean.orderTotalTax+" Payment Type");
 				int result =insertActor.executeUpdate();
 					if(result>=0){
 						System.out.println("Invoice Created");
@@ -175,6 +175,8 @@ public class CashierR extends HttpServlet {
 					
 				}
 				System.out.println(InvoiceNumber +" Inv #");
+				session.setAttribute("maxInvNum", InvoiceNumber);
+				session.setAttribute("timestamp", timestamp);
 				System.out.println("Now Creating Inv # Item Details");
 				
 				for(int i=0;i<ItemBean.getCartItems().size();i++){
@@ -191,7 +193,7 @@ public class CashierR extends HttpServlet {
 					insertActor.setTimestamp(8, timestamp);
 					insertActor.setString(9, "Open");
 					
-					System.out.println("Item add to InvoideDetail with Inv# "+InvoiceNumber+" Item"+ItemBean.getCartItem(i).getiName()+" Qty"+ItemBean.getCartItem(i).getiQty()+" TTl"+ItemBean.getCartItem(i).getTotalTax()+" tax"+ItemBean.getCartItem(i).getTax());
+					//System.out.println("Item add to InvoideDetail with Inv# "+InvoiceNumber+" Item"+ItemBean.getCartItem(i).getiName()+" Qty"+ItemBean.getCartItem(i).getiQty()+" TTl"+ItemBean.getCartItem(i).getTotalTax()+" tax"+ItemBean.getCartItem(i).getTax());
 					result =insertActor.executeUpdate();
 					System.out.println(result+" Execute result");
 					

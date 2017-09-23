@@ -7,29 +7,35 @@ html { width: 100%; height:100%; overflow:hidden; }
 #item {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     font-size: 20px;
-    border-collapse: collapse;
     width: 100%;
+    
 }
 
 #item td, #item th {
-    border: 1px solid #ddd;
+    border: 2px solid #ddd;
     fonr-size: 16px;
+    margin: 5px;
+    border-radius: 10px;
+    color:#ECF9FF;
 }
 
-#item tr:nth-child(even){background-color: #f2f2f2;}
+#item tr:nth-child(even){background-color:#029ED2;}
 
-#item tr:hover {background-color: #ddd;}
+#item tr:hover {background-color:#015773;}
 
 #item th {
-    padding-top: 12px;
-    padding-bottom: 12px;
+    /* padding-top: 12px;
+    padding-bottom: 12px; */
     text-align: left;
-    background-color:#4d79ff;
+    background-color:#029ED2;/*  Whole Dark Blue colors Blue:-#6200ea */
+    class:rounded;
     color: white;
+    color:#ECF9FF;
 }
 .scrollit {
     overflow:scroll;
-    height:450px;
+    height:500px;
+    background:#32B7E3;/*Middle section colorsBlue:-#b388ff */
    	/* background: linear-gradient(to top right, #ffffff 10%, #ffff99 80%); */
    	/* background: linear-gradient(to top, #ffffff -22%, #ffffcc 132%); */
    	font-size: 20px;

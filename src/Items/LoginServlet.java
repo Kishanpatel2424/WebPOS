@@ -6,7 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.ArrayList;
+
+import java.util.Calendar;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -38,15 +39,13 @@ public class LoginServlet extends HttpServlet {
 		String user = request.getParameter("Username");
 		String pwd = request.getParameter("Password");
 		
-		@SuppressWarnings("unchecked")
-		ArrayList<ItemsDescription> itemList = new ArrayList<ItemsDescription>();
 		
 		 
 		 
 		try {
 			 MyConn = ConnectionManager.getConnection();
 			 //myStmt = MyConn.createStatement();
-			 
+				
 			 String sqlStatement = "select * from User where user_Name =? and user_Password =?";
 			 ps = MyConn.prepareStatement(sqlStatement);
 			 ps.setString(1,user);
@@ -66,9 +65,23 @@ public class LoginServlet extends HttpServlet {
 			response.addCookie(userName);
 			
 			//Get the encoded URL string
-			System.out.println(User_Type);
+			
+			
+			Calendar cal = Calendar.getInstance();
+			java.sql.Timestamp timestamp = new java.sql.Timestamp(cal.getTimeInMillis());
+			
+			sqlStatement = "UPDATE User set LastLogin =? WHERE user_Name=? and user_Password=?";
+			ps = MyConn.prepareStatement(sqlStatement);
+			
+			ps.setTimestamp(1, timestamp);
+			ps.setString(2,user);
+			ps.setString(3, pwd);
+			int result = ps.executeUpdate();
+			
+			System.out.println(User_Type+ result);
 			System.out.println("Success");
-			String encodedURL = response.encodeRedirectURL("/InsertDataWebApplication/LoginSuccess.jsp");
+			
+			String encodedURL = response.encodeRedirectURL("/InsertDataWebApplication/Cashier.jsp");
 			response.sendRedirect(encodedURL);
 			
 		}else{
