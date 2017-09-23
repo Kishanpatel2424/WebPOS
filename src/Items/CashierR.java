@@ -181,7 +181,7 @@ public class CashierR extends HttpServlet {
 				
 				for(int i=0;i<ItemBean.getCartItems().size();i++){
 					
-					insertActor = MyConn.prepareStatement("INSERT INTO InvoiceDetail(InvoiceNumber, ItemCode, ItemName,ItemPrice,Quantity,Tax,ItemTotal,Date,Status) VALUES (?,?,?,?,?,?,?,?,?)");
+					insertActor = MyConn.prepareStatement("INSERT INTO InvoiceDetail(InvoiceNumber, ItemCode, ItemName,ItemPrice,Quantity,Tax,ItemTotal,Date,Status,Cashier_Name) VALUES (?,?,?,?,?,?,?,?,?)");
 					
 					insertActor.setInt(1, InvoiceNumber);
 					insertActor.setString(2, ItemBean.getCartItem(i).getiCode());
@@ -192,6 +192,7 @@ public class CashierR extends HttpServlet {
 					insertActor.setDouble(7, ItemBean.getCartItem(i).getTotalTax());
 					insertActor.setTimestamp(8, timestamp);
 					insertActor.setString(9, "Open");
+					insertActor.setString(10, (String)session.getAttribute("Cashier_Name"));
 					
 					//System.out.println("Item add to InvoideDetail with Inv# "+InvoiceNumber+" Item"+ItemBean.getCartItem(i).getiName()+" Qty"+ItemBean.getCartItem(i).getiQty()+" TTl"+ItemBean.getCartItem(i).getTotalTax()+" tax"+ItemBean.getCartItem(i).getTax());
 					result =insertActor.executeUpdate();

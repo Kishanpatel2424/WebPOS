@@ -88,16 +88,13 @@ for(Cookie cookie : cookies){
                 int num =0;
                 while(rs.next()){
                 	num++;
-                
+                	 String code = rs.getString("ItemCode");
+                     String name = rs.getString("ItemName");
+                     String getDouble = rs.getString("Department");
+                     double ItemPrice = rs.getDouble("ItemPrice");
             %>
             <tr>
-                <%
-                    String code = rs.getString("ItemCode");
-                    String name = rs.getString("ItemName");
-                    String getDouble = rs.getString("Department");
-                    double ItemPrice = rs.getDouble("ItemPrice");
-                    
-                %><form id="MyForm" name="MyForm" action="/InsertDataWebApplication/CashierR" method="POST" >
+                <form id="MyForm" name="MyForm" action="/InsertDataWebApplication/CashierR" method="POST" >
                 <td><%=num %></td>
                 <td><input type="submit" value =<%=code %> name="ItemCode"> &nbsp;</td>
                 <td><%=code %></td>
