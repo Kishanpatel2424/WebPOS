@@ -74,6 +74,7 @@ public class AddItems extends HttpServlet {
 		String Price;
 		double iPrice=0.0;
 		int Min_Qty =0;
+		int deposit =0;
 		String Vendor_Name=null;
 		
 		String Department="";
@@ -115,7 +116,7 @@ public class AddItems extends HttpServlet {
 					 Min_Qty = 0;
 				 else
 					 Min_Qty = Integer.parseInt((request.getParameter("Min_Qty")));
-				 
+				 deposit = Integer.parseInt(request.getParameter("Deposit"));
 				 
 			}
 			
@@ -147,7 +148,7 @@ public class AddItems extends HttpServlet {
 				}
 				if(AddItem == true){
 					System.out.println("Item Inserted");
-		         insertActor = MyConn.prepareStatement("INSERT INTO Item(ItemCode, ItemName,ItemCost,ItemPrice,Department,QuantityOnHand,Min_Qty,Vendor_Name) VALUES(?,?,?,?,?,?,?,?)");
+		         insertActor = MyConn.prepareStatement("INSERT INTO Item(ItemCode, ItemName,ItemCost,ItemPrice,Department,QuantityOnHand,Min_Qty,Vendor_Name,deposit) VALUES(?,?,?,?,?,?,?,?,?)");
 		         insertActor.setString(1,iCode);
 		         insertActor.setString(2, iName);
 		         insertActor.setDouble(3, iCost);
@@ -156,6 +157,7 @@ public class AddItems extends HttpServlet {
 		         insertActor.setInt(6, OtyOnHand);
 		         insertActor.setInt(7, Min_Qty);
 		         insertActor.setString(8, Vendor_Name);
+		         insertActor.setInt(9, deposit);
 		         
 		         result =insertActor.executeUpdate();
 		         //int rs = myStmt.executeUpdate(sql);

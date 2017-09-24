@@ -119,11 +119,18 @@ for(Cookie cookie : cookies){
 					</div>
 				</div>
 			</div>
-			
-			<div class="form-group">Item Name
-				<input type="text" name="iName" value="" class="form-control input-lg" placeholder="Product Name" tabindex="3">
+			<div class ="row">
+				<div class="col-xs-12 col-sm-9 col-md-9">
+					<div class="form-group">Item Name
+						<input type="text" name="iName" value="" class="form-control input-lg" placeholder="Product Name" tabindex="3">
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-3 col-md-3">
+					<div class="form-group">Deposit Qty.
+						<input type="number" name="Deposit" value="" class="form-control input-lg" placeholder="Qty." tabindex="3">
+					</div>
+				</div>
 			</div>
-			
 			<div class="row">
 				<div class="col-xs-12 col-sm-6 col-md-6">
 					<div class="form-group"> Choose Vendor
@@ -197,24 +204,24 @@ for(Cookie cookie : cookies){
 			<div class="row">
 				<div class="col-xs-12 col-sm-4 col-md-4">
 					<div class="form-group">Sell Price
-						<input type="number" step=0.01 id="iPrice" name="iPrice"  onKeyUp="sum()" class="form-control input-lg" placeholder="Item Sell Price" tabindex="5">
+						<input type="number" step=0.01 id="iPrice" name="iPrice"  onKeyUp="sum()" class="form-control input-lg" placeholder="Item Sell Price" tabindex="8">
 					</div>
 				</div>
 				<div class="col-xs-12 col-sm-4 col-md-4">
 					<div class="form-group">On Hand Qty
-						<input type="number" id="OtyOnHand" name="OtyOnHand" onkeyup="" class="form-control input-lg" placeholder="Qty On Hand" tabindex="6">
+						<input type="number" id="OtyOnHand" name="OtyOnHand" onkeyup="" class="form-control input-lg" placeholder="Qty On Hand" tabindex="9">
 					</div>
 				</div>
 				<div class="col-xs-12 col-sm-4 col-md-4">
 					<div class="form-group">GP Margin
-						<input type="number" step=0.01 id="GP" name="GP" onkeyup="" class="form-control input-lg" placeholder="Gross Profit" tabindex="7">
+						<input type="number" step=0.01 id="GP" name="GP" onkeyup="" class="form-control input-lg" placeholder="Gross Profit" tabindex="10">
 					</div>
 				</div>
 			</div>
 			
 			<hr class="colorgraph">
 			<div class="row">
-				<div class="col-xs-12 col-md-6"><input type="submit" value="ADD" name="Addsubmit" class="btn btn-primary btn-block btn-lg" tabindex="7"></div>
+				<div class="col-xs-12 col-md-6"><input type="submit" value="ADD" name="Addsubmit" class="btn btn-primary btn-block btn-lg"></div>
 				<div class="col-xs-12 col-md-6"><input type="reset" value="Clear" name="clear" class="btn btn-success btn-block btn-lg"/></div>
 			</div>
 		</form>

@@ -56,7 +56,7 @@ public class ItemsDescription {
 	//Returns tax on each item
 	
 	public void setTax(String iCode, double iPrice, double iQty){
-		if(iCode == "NonTax" || iCode == "Bottle Deposit" || iCode == "Return Deposit"){
+		if(iCode.equals("NonTax") || iCode.equals("Bottle Deposit") || iCode == "Return Deposit"){
 			this.ItemTotal =0;
 			//System.out.println(this.ItemTotal+" From Item Desc");
 		}

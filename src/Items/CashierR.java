@@ -256,7 +256,7 @@ public class CashierR extends HttpServlet {
 		
 		System.out.println(iCode+" is");
 		objCartBean = session.getAttribute("cart");
-		
+		int dep =0;
 		
 			try {
 
@@ -290,23 +290,27 @@ public class CashierR extends HttpServlet {
 			rs = ps.executeQuery();
 				while(rs.next()){
 						
-					iName= rs.getString("ItemName");
-					iPrice=rs.getDouble("ItemPrice");
-					if(iCode.equals("NonTax")){
-						if(!request.getParameter("nonTaxItemValue").equals(""))
-							iPrice = Double.parseDouble(request.getParameter("nonTaxItemValue"));
-						else
-							iPrice = rs.getDouble("ItemPrice");
+						iName= rs.getString("ItemName");
+						iPrice=rs.getDouble("ItemPrice");
+						dep = rs.getInt("Deposit");
+						if(iCode.equals("NonTax")){
+							if(!request.getParameter("nonTaxItemValue").equals(""))
+								iPrice = Double.parseDouble(request.getParameter("nonTaxItemValue"));
+							else
+								iPrice = rs.getDouble("ItemPrice");
+						}
+						if(iCode.equals("Tax")){
+							if(!request.getParameter("taxItemValue").equals(""))
+								iPrice = Double.parseDouble(request.getParameter("taxItemValue"));
+							else
+								iPrice = rs.getDouble("ItemPrice");
+						}
 					}
-					if(iCode.equals("Tax")){
-						if(!request.getParameter("taxItemValue").equals(""))
-							iPrice = Double.parseDouble(request.getParameter("taxItemValue"));
-						else
-							iPrice = rs.getDouble("ItemPrice");
-					}
-					}
+				
 				if(iCode.equals("NonTax"))
 					iCode = "NonTax";
+					
+					
 									 
 									  if(objCartBean!=null) {
 										  ItemBean = (ItemBean) objCartBean ;
@@ -321,8 +325,30 @@ public class CashierR extends HttpServlet {
 									  }
 									  
 									  ItemBean.addCartItem(iCode, iName, iPrice, iQty);
-									  
-									  
+/**************************DEPOSIT ONLY CODE**************************/					
+					if(dep >0.0){
+						iCode = "Bottle Deposit";
+						iPrice = 0.05;
+						iName = "Bottle Deposit";
+						iQty = dep;
+						System.out.println("Deposit inserted "+iCode+" "+" "+iPrice+" "+iQty);
+						
+					
+					objCartBean = session.getAttribute("cart");
+					if(objCartBean!=null) {
+						  ItemBean = (ItemBean) objCartBean ;
+						  //ItemBean.getCartItem(0);
+						  
+						  session.setAttribute("cart", ItemBean);
+					  } else {
+						  ItemBean = new ItemBean();
+						  ItemBean.setchangeDue(0);
+						  session.setAttribute("cart", ItemBean);
+					   
+					  }
+					  dep=0;
+					  ItemBean.addCartItem(iCode, iName, iPrice, iQty);	
+					}
 			/*ItemBean cartItem= (ItemBean) session.getAttribute("cart");
 					System.out.println(cartItem.getTotalItemCount()+" size");*/
 									  for(ItemsDescription b : ItemBean.getCartItems()){
