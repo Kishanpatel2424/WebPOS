@@ -126,28 +126,25 @@ String NotExist = (String)request.getAttribute("NotExist");
 				
 			</th>
 		</tr>
+
 		</table>
-	</div>
-		 
-		 	<table class="table" id="item" >
-		 	<div class="table-responsive">
-		 		<tr>
-						<th style="width:4%">#</th>
-						<th style="width:14%">Bar Code</th>
-						<th style="width:46%">Item Name</th>
-						<th style="width:10%">Price</th>
-						<th style="width:6%">Qty</th>
-						<th style="width:10%">Tax</th>
-						<th style="width:10%">Total</th>
-						
-				</tr>
-			</table>
-		 </div>
-				
-				<div class="scrollit" >
-						<table class="table" id="item">
-							
-						        <%
+	</div><table  id="item">
+					<tr style="background-color:#015773; height:50px">
+									<td style="width:4%">#</td>
+									<td style="width:14%">Bar Code</td>
+									<td style="width:46%">Item Name</td>
+									<td style="width:10%">Price</td>
+									<td style="width:6%">Qty</td>
+									<td style="width:10%">Tax</td>
+									<td style="width:10%">Total</td>
+									
+					</tr>
+
+	</table>
+	<div class="scrollit" >
+		<table class="table" id="item">
+					<tbody>
+							<%
 						        int number =0;
 						        	if(objCartBean !=null){
 						       	 		ItemBean = (ItemBean) objCartBean ;	 
@@ -163,7 +160,7 @@ String NotExist = (String)request.getAttribute("NotExist");
 								        <%-- <c:set var="Quantity" value="${item.getiQty()}"/> --%>
 								        <%-- <c:set var="ItemPrice" value="${item.getiQty()*item.getiPrice()}"/> --%>
 								        <%-- <c:set var="TotalNonTax" value="${TotalNonTax+ItemPrice}"/> Not Needed --%>
-								        
+								 <div class="inner_table">      
 								         
 								        <tr> 
 								        
@@ -176,18 +173,18 @@ String NotExist = (String)request.getAttribute("NotExist");
 											<td style="width:10%"><fmt:formatNumber type = "currency" pattern = "####.##" value = "<%=b.getItemTotalTax() %>" /></td>					            
 								        
 								        </tr>
-						            
+						            </div>
 						        <%}
 						        	
 						        	}%>
 						        
-							
+						</tbody>	
 						</table>
 					</div>
 				
 		 	<div class="table-responsive" class="ex1">
-	<table class="table" id="item" >
-		<tr>
+	<table class="table" id ="bottom">
+		<tr >
 			<th style="width:15%;">
 				<input type="submit" Value="Non Tax" name="action" id="nonTaxItem" class="form-control">
 				<input type="number" step="0.01" id="nonTaxItem" name="nonTaxItemValue" value="" placeholder="Price $" class="form-control"/>
