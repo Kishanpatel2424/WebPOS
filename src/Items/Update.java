@@ -158,7 +158,7 @@ public class Update extends HttpServlet {
 				MyConn = ConnectionManager.getConnection();
 				 myStmt = MyConn.createStatement();
 				 
-				 UpdateActor = MyConn.prepareStatement("UPDATE Item set ItemCode=?, ItemName=?, ItemCost=?, ItemPrice=?, Department=?, QuantityOnHand=?, deposit=?, Vender_Name=?, Min_Qty=? where ItemCode=?");
+				 UpdateActor = MyConn.prepareStatement("UPDATE Item set ItemCode=?, ItemName=?, ItemCost=?, ItemPrice=?, Department=?, QuantityOnHand=?, deposit=?, Vendor_Name=?, Min_Qty=? where ItemCode=?");
 				 
 				 if(request.getParameter("iCode") != null){
 					 iCode =request.getParameter("iCode").trim();

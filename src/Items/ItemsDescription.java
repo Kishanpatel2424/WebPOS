@@ -10,24 +10,35 @@ public class ItemsDescription {
 	public double ItemTotal;
 	public double total; 
 	public double totalTax;
-	public String payment_Type;
-	public double amount_Total;
-	public double change_Due;
 	
-	public void setpType(String pType){
-		payment_Type =pType;
+	public String Vendor_Name;
+	public double iCost;
+	public int QtyOnHand;
+	public int minQty;
+	
+	public void setpType(String vendor_Name){
+		Vendor_Name =vendor_Name;
 	}
-	public String getiPtype(){
-		return payment_Type;
+	public String getVendor_Name(){
+		return Vendor_Name;
 	}
-	public void setamtTotal(double amtTtl){
-		amount_Total = amtTtl;
+	public void setiCost(double itemCost){
+		iCost = itemCost;
 	}
-	public double getamtTotal(){
-		return amount_Total;
+	public double getiCost(){
+		return iCost;
 	}
-	public void setDue(double amtDue){
-		change_Due = amtDue;
+	public void setQtyOnHand(int OnHandQty){
+		QtyOnHand = OnHandQty;
+	}
+	public int getQtyOnHand(){
+		return QtyOnHand;
+	}
+	public void setminQty(int Qty){
+		minQty = Qty;
+	}
+	public int getminQty(){
+		return minQty;
 	}
 	public void setiCode(String ItemCode){
 		iCode = ItemCode;

@@ -75,10 +75,16 @@ for(Cookie cookie : cookies){
 
 
             <%
-                Class.forName("com.mysql.jdbc.Driver");
+               /*  Class.forName("com.mysql.jdbc.Driver");
                 Connection conn = null;
                 conn = DriverManager.getConnection("jdbc:mysql://localhost:8889/test", "root", "root");
                 //conn = DriverManager.getConnection("jdbc:mysql://node23485-onlinepos.njs.jelastic.vps-host.net /test","root","BPNivr47456");
+                 */
+               Connection conn = null;
+               ConnectionManager cm = new  ConnectionManager();
+               conn= cm.MyConn;
+               
+               
                 Statement stmt = null;
                 stmt = conn.createStatement();
                 String SearchList =request.getParameter("SearchList");

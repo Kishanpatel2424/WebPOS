@@ -1,3 +1,4 @@
+<%@ page import="Items.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -69,10 +70,10 @@ String pt =null;
         </thead>
         <tbody>
 <%
-                Class.forName("com.mysql.jdbc.Driver");
-                Connection conn = null;
-                conn = DriverManager.getConnection("jdbc:mysql://localhost:8889/test", "root", "root");
-                //conn = DriverManager.getConnection("jdbc:mysql://node23485-onlinepos.njs.jelastic.vps-host.net/test","root","BPNivr47456");
+		Connection conn = null;
+		ConnectionManager cm = new  ConnectionManager();
+		conn= cm.MyConn;
+//conn = DriverManager.getConnection("jdbc:mysql://node23485-onlinepos.njs.jelastic.vps-host.net/test","root","BPNivr47456");
                 Statement stmt = null;
                 stmt = conn.createStatement();
                 
@@ -88,7 +89,7 @@ String pt =null;
             %>
     
     
-    <div style="width:100%; padding:0px; float:left;">
+    <div >
      <tr>
           <%
                     String code = rs.getString("ItemCode");
@@ -112,7 +113,7 @@ String pt =null;
     </div>
     
 <%} %>
-<div style="width:100%; padding:0px; float:right;">
+<div >
      <tr>
      	<th><h3> Subtotal Tax=</h3></th>
      	<th><h3><%=tax %></h3></th>

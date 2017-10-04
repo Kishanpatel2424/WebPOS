@@ -143,7 +143,7 @@ public class CashierR extends HttpServlet {
 			try {
 
 				MyConn = ConnectionManager.getConnection();
-				myStmt = MyConn.createStatement();
+				//myStmt = MyConn.createStatement();
 				System.out.println(session.getAttribute("user_id"));
 				System.out.println(ItemBean.orderTotal+" ChangeDue "+ItemBean.change_Due+" pType "+payment_Type+" Tax "+ItemBean.orderTotalTax);
 				
@@ -181,7 +181,7 @@ public class CashierR extends HttpServlet {
 				
 				for(int i=0;i<ItemBean.getCartItems().size();i++){
 					
-					insertActor = MyConn.prepareStatement("INSERT INTO InvoiceDetail(InvoiceNumber, ItemCode, ItemName,ItemPrice,Quantity,Tax,ItemTotal,Date,Status,Cashier_Name) VALUES (?,?,?,?,?,?,?,?,?)");
+					insertActor = MyConn.prepareStatement("INSERT INTO InvoiceDetail(InvoiceNumber, ItemCode, ItemName,ItemPrice,Quantity,Tax,ItemTotal,Date,Status,Cashier_Name) VALUES (?,?,?,?,?,?,?,?,?,?)");
 					
 					insertActor.setInt(1, InvoiceNumber);
 					insertActor.setString(2, ItemBean.getCartItem(i).getiCode());
@@ -254,33 +254,38 @@ public class CashierR extends HttpServlet {
 		
 		
 		
-		System.out.println(iCode+" is");
+		
 		objCartBean = session.getAttribute("cart");
 		int dep =0;
 		
 			try {
 
-					MyConn = ConnectionManager.getConnection();
+				MyConn = ConnectionManager.getConnection();
 				
-				 myStmt = MyConn.createStatement();
-				
+				myStmt = MyConn.createStatement();
+				if(iCode.equals("")){
+					itemFound = false;
+					//request.getSession().setAttribute("Message","BarCodeEmpty");	
+				}
+				else{
 				//myStmt = MyConn.createStatement();
 				 Check = ("SELECT COUNT(ItemCode) FROM Item WHERE ItemCode =?");
 				  
-				   ps = MyConn.prepareStatement(Check);
+				  ps = MyConn.prepareStatement(Check);
 				  ps.setString(1, iCode);
 				  ResultSet results = ps.executeQuery();
 				  
-					 
+				
 					while(results.next()){
 				        	if(results.getInt(1)<=0){
 				        		itemFound = false;
-				        		request.setAttribute("NotExist", "NotExist");
-				        		
+				        		//request.getSession().setAttribute("Message", "Not Found");
+				        		System.out.println("Item Not Found");
 				        	}
 				        	else
 				        		itemFound =true;
 					}
+				}
 			if(itemFound == true){
 			Check = ("select * From Item where ItemCode =?");
 			

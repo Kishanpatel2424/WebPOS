@@ -34,6 +34,21 @@
 
 </style>
 <body onload="document.MyForm.iCode.focus();">
+<%-- <%
+ 
+String Message = (String)session.getAttribute("Message");
+if(Message == ("BarCodeEmpty")){
+	
+		%>
+		 <script type="text/javascript">
+	    var msg = "<%=Message%>";
+	    alert(msg);
+		</script>
+		<%
+	}
+
+%>
+ --%>
 <%
 String userName = null;
 //allow access only if session exists
@@ -56,33 +71,6 @@ if(objCartBean !=null){
 	
 }
 
-%>
-<%
- 
-String succ = (String)request.getAttribute("Paid");
-String NotExist = (String)request.getAttribute("NotExist");
-	String Empty = (String)request.getAttribute("BarCodeEmpty");
-	if(succ!= null){
-		%>
-		 <script type="text/javascript">
-	    var msg = "<%=succ%>";
-	    alert(msg);
-	</script><%
-	}
-	if(NotExist!=null){
-		%>
-			 <script type="text/javascript">
-		    var msg = "Item Not Exist";
-		    alert(msg);
-		</script><%
-		}
-	if(Empty!=null){
-		%>
-			 <script type="text/javascript">
-		    var msg = "Enter Barcode";
-		    alert(msg);
-		</script><%
-		}
 %>
 
 <div class="container-center">

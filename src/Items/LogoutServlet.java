@@ -64,6 +64,8 @@ public class LogoutServlet extends HttpServlet {
 			 ps.setTimestamp(1, timestamp);
 			 ps.setInt(2, id);
 			 int result = ps.executeUpdate();
+			 ps.close();
+			 MyConn.close();
     	}
     	catch (Exception e) {
 			// TODO Auto-generated catch block

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public class ConnectionManager {
    
-	 private static java.sql.Connection MyConn = null;
+	 public static java.sql.Connection MyConn = null;
 	static java.sql.Connection getConnection() throws Exception {
 
 		
@@ -41,7 +41,7 @@ public class ConnectionManager {
 		String userName = "b9f000a9727bab";
 		String password = "4fc8eab7";*/
 		
-	        Connection connection = null;
+	        
 	        Class.forName(driver).newInstance();
 	         MyConn = (Connection) DriverManager.getConnection(url, userName,password);
 	         if(MyConn ==null)

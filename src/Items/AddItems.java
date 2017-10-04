@@ -16,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sql.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -63,7 +64,7 @@ public class AddItems extends HttpServlet {
 		String title="Database connect";
 		pw.println(getServletInfo());
 		PreparedStatement ps =null;
-		
+		HttpSession session = null;
 		boolean submitButtonPressed = request.getParameter("Addsubmit") != null;
 		boolean AddItem = true;
 		//boolean deleteSubmitButton 	= request.getParameter("dSubmit") != null;
@@ -116,7 +117,10 @@ public class AddItems extends HttpServlet {
 					 Min_Qty = 0;
 				 else
 					 Min_Qty = Integer.parseInt((request.getParameter("Min_Qty")));
-				 deposit = Integer.parseInt(request.getParameter("Deposit"));
+				 if(request.getParameter("Deposit").equals("") || request.getParameter("Deposit").equals(null))
+					 deposit =0;
+				 else
+					 deposit = Integer.parseInt(request.getParameter("Deposit"));
 				 
 			}
 			
@@ -140,7 +144,7 @@ public class AddItems extends HttpServlet {
 		        while(rs.next()){
 		        	if(rs.getInt(1)>0){
 		        		System.out.println("Item Already Exist with BarCode "+iCode);
-					request.setAttribute("Exist","Exist");
+		        		request.getSession().setAttribute("Message","Exist");
 		        	 request.getRequestDispatcher("/AddItem.jsp").forward(request, response);
 		        	 AddItem = false;
 		        	}
@@ -165,14 +169,14 @@ public class AddItems extends HttpServlet {
 		          
 		          
 		          if(result>0){
-		        	 request.setAttribute("Successfull","Successfull");
+		        	  request.getSession().setAttribute("Message","Successfull");
 		        	 request.getRequestDispatcher("/AddItem.jsp").forward(request, response); 
 		        	 //response.sendRedirect("/InsertDataWebApplication/AddItem.jsp");
 		          }
 		          else{
 		        	  
 		        	  System.out.println("Item Not Inserted");
-		        	  request.setAttribute("ErrorCode","Item Not found");
+		        	  request.getSession().setAttribute("Message","Item Not found");
 			        	 request.getRequestDispatcher("/AddItem.jsp").forward(request, response);
 		          }
 		          insertActor.close();

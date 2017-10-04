@@ -15,6 +15,25 @@
 </head>
 <body onload="ClearForm()">
 <center><h1>Add Item</h1></center>
+
+<%
+	String Message = (String)session.getAttribute("Message");
+	
+	if(Message == ("Successfull"))	{
+		%>
+		 <script type="text/javascript">
+	    var msg = "<%=Message%>";
+	    alert(msg);
+	</script><%
+	}
+	else if(Message == "Exist"){
+	%>
+		 <script type="text/javascript">
+	    var msg = "Item Already Exist";
+	    alert(msg);
+	</script><%
+	}
+%>
 <%
 String userName = null;
 //allow access only if session exists
@@ -30,24 +49,6 @@ for(Cookie cookie : cookies){
 }
 %>
 
-<%
-	String succ = (String)request.getAttribute("Successfull");
-	String Exist = (String)request.getAttribute("Exist");
-	if(succ!= null){
-		%>
-		 <script type="text/javascript">
-	    var msg = "<%=succ%>";
-	    alert(msg);
-	</script><%
-	}
-	if(Exist!=null){
-	%>
-		 <script type="text/javascript">
-	    var msg = "Item Already Exist";
-	    alert(msg);
-	</script><%
-	}
-%>
 
 <script type="text/javascript"> 
   function tabE(obj,e){ 
@@ -157,10 +158,6 @@ for(Cookie cookie : cookies){
 		            		%>
 									<option value="<%=rs.getString("Vendor_Name") %>"><%=rs.getString("Vendor_Name") %></option>
 						<%} 
-						query = "SELECT Department_Name FROM Departements";
-		                rs = null;
-		                rs = stmt.executeQuery(query);
-		                num =0;
 		                %>
 						</select>
 					</div>
@@ -170,6 +167,10 @@ for(Cookie cookie : cookies){
 					<div class="form-group"> Choose Department
 					<select name="Department" class="form-control input-lg" placeholder="Departement" tabindex="4">
 						<%
+						query = "SELECT Department_Name FROM Departements";
+		                rs = null;
+		                rs = stmt.executeQuery(query);
+		                num =0;
                 while(rs.next()){
                 	num++;
                 

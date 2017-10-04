@@ -4,12 +4,16 @@ import java.util.ArrayList;
 
 public class ItemBean {
 	private ArrayList<ItemsDescription> itemList = new ArrayList<ItemsDescription>();
+	private ArrayList<ItemsDescription> VendorItemList = new ArrayList<ItemsDescription>();
 	public double orderTotal, orderTotalTax =0.0;
 	public double change_Due =0;
 	private double itemTotalRemove, itemTotalRemoveTax =0.0;
 	private double dummy=0;
 	public int getTotalItemCount(){
 		return itemList.size();
+	}
+	public int getVendorListSize(){
+		return VendorItemList.size();
 	}
 	public void setchangeDue(double changeDue){
 		dummy = Math.round((changeDue*1.0)*100);
@@ -140,4 +144,44 @@ public static double TotalTax (double tax){
 
 return TotalsumTax;
 }
+
+public void VendorItem(String ItemCode, String ItemName,
+		double ItemCost, int QuantityOnHand, int minQty) {
+		 
+		  
+		  ItemsDescription vendorItem = new ItemsDescription();
+		  try {
+		   
+		   
+		    
+			vendorItem.setiCode(ItemCode);
+			vendorItem.setiName(ItemName);
+			vendorItem.setiCost(ItemCost);
+			vendorItem.setQtyOnHand(QuantityOnHand);
+			vendorItem.setminQty(minQty);
+		    VendorItems(vendorItem);
+		   
+		    
+		    //System.out.println(ItemName+" from VendorItems");
+		  } catch (NumberFormatException nfe) {
+		   System.out.println("Error while parsing from String to primitive types: "+nfe.getMessage());
+		   nfe.printStackTrace();
+		  }
+}
+
+public void VendorItems(ItemsDescription cartItem) {
+	VendorItemList.add(cartItem);
+}
+public ArrayList<ItemsDescription> getVendorItemList() {
+	//System.out.println(itemList);  
+	return VendorItemList;
+	 }
+ public void setVendorItemList(ArrayList<ItemsDescription> alVendorItems) {
+	  this.VendorItemList = alVendorItems;
+	 }
+ 
+ public void clearVendorItem(){
+		this.VendorItemList.clear();
+		
+	}
 }
